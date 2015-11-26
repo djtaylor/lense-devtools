@@ -8,6 +8,14 @@ Builds the following:
  - Lense Engine <https://github.com/djtaylor/lense-engine>
  - Lense Portal <https://github.com/djtaylor/lense-portal>
 
+### Dependencies
+
+```sh
+$ sudo apt-get install git python-pip
+$ sudo pip install -r requirements.txt
+
+```
+
 ### Instructions
 
 ```sh
