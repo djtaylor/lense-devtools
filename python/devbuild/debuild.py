@@ -13,7 +13,7 @@ class LenseDebuild(LenseDevBuildCommon):
         # Name / root / source / version
         self.name    = name
         self.root    = '{0}/{1}'.format(self.pkgroot, root)
-        self.src     = '{0}/{1}'.format(root, name)
+        self.src     = '{0}/{1}'.format(self.root, name)
         self.version = version
 
         # Define the source tarball
