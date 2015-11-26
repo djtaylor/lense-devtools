@@ -8,7 +8,7 @@ class LenseDevBuildCommon(object):
     Common class for the development buider modules.
     """
     def __init__(self):
-        self.pkgroot  = path.dirname(path.dirname(path.realpath(__file__)))
+        self.pkgroot  = path.dirname(path.dirname(path.dirname(path.realpath(__file__))))
         
         # Feedback / projects manifest
         self.feedback = Feedback()
