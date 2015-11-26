@@ -12,8 +12,6 @@ Builds the following:
 
 ```sh
 $ sudo apt-get install git python-pip build-essential devscripts
-$ sudo pip install -r requirements.txt
-
 ```
 
 ### Instructions
@@ -21,5 +19,6 @@ $ sudo pip install -r requirements.txt
 ```sh
 $ git clone https://github.com/djtaylor/lense-devbuild.git
 $ cd lense-devbuild
+$ sudo pip install -r requirements.txt
 $ python build.py
 ```
