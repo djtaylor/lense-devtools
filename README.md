@@ -7,3 +7,11 @@ Builds the following:
  - Lense Client <https://github.com/djtaylor/lense-client>
  - Lense Engine <https://github.com/djtaylor/lense-engine>
  - Lense Portal <https://github.com/djtaylor/lense-portal>
+
+### Instructions
+
+```sh
+$ git clone https://github.com/djtaylor/lense-devbuild.git
+$ cd lense-devbuild
+$ python build.py
+```
