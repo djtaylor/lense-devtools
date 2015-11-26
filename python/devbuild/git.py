@@ -10,7 +10,7 @@ class LenseGitRepo(LenseDevBuildCommon):
         super(LenseGitRepo, self).__init__()
         
         # Local / remote / name / branch
-        self.local  = '{0}/{1}'.format(local, name)
+        self.local  = '{0}/{1}/{2}'.format(self.pkgroot, local, name)
         self.remote = remote
         self.name   = name
         self.branch = branch

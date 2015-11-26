@@ -3,7 +3,7 @@
         "name": "lense-engine",
         "git-src": "https://github.com/djtaylor/lense-engine.git",
         "git-branch": "dev",
-        "git-local": "/home/phrgadmin/lense/github/lense-engine",
+        "git-local": "src/lense-engine",
         "gpg-sign": "15F72EC5",
         "build-version": "0.1.1"
     },
@@ -11,7 +11,7 @@
         "name": "lense-portal",
         "git-src": "https://github.com/djtaylor/lense-portal.git",
         "git-branch": "dev",
-        "git-local": "/home/phrgadmin/lense/github/lense-portal",
+        "git-local": "src/lense-portal",
         "gpg-sign": "15F72EC5",
         "build-version": "0.1.1"
     },
@@ -19,7 +19,7 @@
         "name": "lense-client",
         "git-src": "https://github.com/djtaylor/lense-client.git",
         "git-branch": "dev",
-        "git-local": "/home/phrgadmin/lense/github/lense-client",
+        "git-local": "src/lense-client",
         "gpg-sign": "15F72EC5",
         "build-version": "0.1.1"
     },
@@ -27,7 +27,7 @@
         "name": "lense-socket",
         "git-src": "https://github.com/djtaylor/lense-socket.git",
         "git-branch": "dev",
-        "git-local": "/home/phrgadmin/lense/github/lense-socket",
+        "git-local": "src/lense-socket",
         "gpg-sign": "15F72EC5",
         "build-version": "0.1.1"
     },
@@ -35,7 +35,7 @@
         "name": "lense-common",
         "git-src": "https://github.com/djtaylor/lense-common.git",
         "git-branch": "dev",
-        "git-local": "/home/phrgadmin/lense/github/lense-common",
+        "git-local": "src/lense-common",
         "gpg-sign": "15F72EC5",
         "build-version": "0.1.1"
     }

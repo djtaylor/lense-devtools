@@ -12,7 +12,7 @@ class LenseDebuild(LenseDevBuildCommon):
         
         # Name / root / source / version
         self.name    = name
-        self.root    = root
+        self.root    = '{0}/{1}'.format(self.pkgroot, root)
         self.src     = '{0}/{1}'.format(root, name)
         self.version = version
 
@@ -25,7 +25,7 @@ class LenseDebuild(LenseDevBuildCommon):
         self.debpath = '{0}/{1}'.format(self.root, self.debpkg)
 
         # Build output directory
-        self.bdir    = self.mkdir('{0}/build/{1}'.format(self.version, self.pkgroot))
+        self.bdir    = self.mkdir('{0}/build/{1}'.format(self.pkgroot, self.version))
 
     def _tar_src(self):
         """
