@@ -19,7 +19,7 @@ $ sudo apt-get install git python-pip build-essential devscripts
 ```sh
 $ git clone https://github.com/djtaylor/lense-devbuild.git
 $ cd lense-devbuild
-$ sudo pip install -r build.requirements.txt
+$ sudo ./requirements.sh "build"
 $ python build.py
 ```
 
@@ -28,8 +28,7 @@ $ python build.py
 The following is a quick and dirty way to get an all-in-one Lense installation.
 
 ```sh
-$ sudo apt-get install $(grep -vE "^\s*#" lense-apt.requirements.txt  | tr "\n" " ")
-$ sudo pip install -r lense-pip.requirements.txt
+$ sudo ./requirements.sh "lense"
 $ sudo dpkg -i build/<version>/*
 $ sudo mysql_secure_installation
 $ sudo lense-bootstrap
