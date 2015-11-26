@@ -1,0 +1,7 @@
+mysql-server
+apache2
+libapache2-mod-wsgi
+python-crypto
+python-ldap
+python-mysqldb
+python-pip
