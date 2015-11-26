@@ -7,7 +7,7 @@ from os import path
 sys.path.append('{0}/python'.format(path.dirname(path.realpath(__file__))))
 
 # Devbuild Modules
-from devbuild.git import LenseGitRepo
+from devbuild.gitrepo import LenseGitRepo
 from devbuild.debuild import LenseDebuild
 from devbuild.common import LenseDevBuildCommon
 
