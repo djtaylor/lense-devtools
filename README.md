@@ -31,5 +31,6 @@ The following is a quick and dirty way to get an all-in-one Lense installation.
 $ sudo apt-get install $(grep -vE "^\s*#" lense-apt.requirements.txt  | tr "\n" " ")
 $ sudo pip install -r lense-pip.requirements.txt
 $ sudo dpkg -i build/<version>/*
+$ sudo mysql_secure_installation
 $ sudo lense-bootstrap
 ```
