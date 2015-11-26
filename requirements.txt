@@ -1,2 +1,0 @@
-GitPython >= 1.0.1
-feedback >= 0.1

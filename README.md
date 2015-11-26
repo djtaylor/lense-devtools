@@ -19,6 +19,6 @@ $ sudo apt-get install git python-pip build-essential devscripts
 ```sh
 $ git clone https://github.com/djtaylor/lense-devbuild.git
 $ cd lense-devbuild
-$ sudo pip install -r requirements.txt
+$ sudo pip install -r build.requirements.txt
 $ python build.py
 ```
