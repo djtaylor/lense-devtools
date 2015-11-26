@@ -11,7 +11,7 @@ Builds the following:
 ### Dependencies
 
 ```sh
-$ sudo apt-get install git python-pip
+$ sudo apt-get install git python-pip build-essential devscripts
 $ sudo pip install -r requirements.txt
 
 ```
