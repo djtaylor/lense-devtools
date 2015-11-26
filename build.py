@@ -3,6 +3,13 @@ from __future__ import print_function
 import sys
 from os import path
 
+# Make sure Git/Gitpython is available
+try:
+    import git
+except Exception as e:
+    print('ERROR: Failed to import module "git". Please make sure Git and Gitpython are installed')
+    sys.exit(1)
+
 # Add the local Python path
 sys.path.append('{0}/python'.format(path.dirname(path.realpath(__file__))))
 
@@ -10,13 +17,6 @@ sys.path.append('{0}/python'.format(path.dirname(path.realpath(__file__))))
 from devbuild.gitrepo import LenseGitRepo
 from devbuild.debuild import LenseDebuild
 from devbuild.common import LenseDevBuildCommon
-
-# Make sure Git/Gitpython is available
-try:
-    import git
-except Exception as e:
-    print('ERROR: Failed to import module "git". Please make sure Git and Gitpython are installed')
-    sys.exit(1)
 
 class LenseDevBuild(LenseDevBuildCommon):
     """
