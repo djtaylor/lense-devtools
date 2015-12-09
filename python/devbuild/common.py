@@ -14,6 +14,17 @@ class LenseDevBuildCommon(object):
         self.feedback = Feedback()
         self.projects = json_load(open('{0}/projects.json'.format(self.pkgroot), 'r'))
         
+    def load_history(self, file):
+        """
+        Load the local history of builds.
+        """
+        history = []
+        
+        # Read the history line by line
+        with open(file, 'r') as f:
+            for l in f.readlines():
+                print 'HISTORY: {0}'.format(l)
+        
     def mkdir(self, dir_path):
         """
         Make a directory and return the path name.
