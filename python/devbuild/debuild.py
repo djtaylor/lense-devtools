@@ -70,6 +70,21 @@ class LenseDebuild(LenseDBCommon):
         offset = '+0000'
         return datetime.now().strftime('%a, %d %b %Y %H:%M:%S {0}'.format(offset))
 
+    def _dpkg_patch(self):
+        """
+        Run a dpkg-source --commit to generate patches for non-base revisions.
+        """
+        if not self.revision == 'dev0':
+            patch_name = 'patch_{0}'.format(self.revision)
+            
+            # Run dpkg-source
+            code, out, err = self.shell_exec(['EDITOR=/bin/true', 'dpkg-source', '-q', '--commit', '.', patch_name])
+    
+            # Make sure the patch was created
+            if not code == 0:
+                self.die('Failed to generate "{0}": {1}'.format(patch_name, str(err)))
+            self.feedback.success('Generated patch file -> {0}'.format(patch_name))
+
     def _set_changelog(self):
         """
         Set the next changelog entry prior to building.
@@ -146,6 +161,9 @@ class LenseDebuild(LenseDBCommon):
         
         # Change to the source directory
         chdir(self.src)
+        
+        # Generate a patch file if needed
+        self._dpkg_patch()
         
         # Start building the package
         code, err = self.shell_exec(['debuild', '-uc', '-us'])
