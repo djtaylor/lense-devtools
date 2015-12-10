@@ -4,7 +4,7 @@ from re import compile
 from getpass import getuser
 from datetime import datetime
 from socket import gethostname
-from os import chdir, path, unlink, symlink
+from os import chdir, path, unlink, symlink, environ
 from devbuild.common import LenseDBCommon
 
 class LenseDebuild(LenseDBCommon):
@@ -76,9 +76,10 @@ class LenseDebuild(LenseDBCommon):
         """
         if not self.revision == 'dev0':
             patch_name = 'patch_{0}'.format(self.revision)
+            environ['EDITOR'] = '/bin/true'
             
             # Run dpkg-source
-            code, out, err = self.shell_exec(['EDITOR=/bin/true', 'dpkg-source', '-q', '--commit', '.', patch_name])
+            code, out, err = self.shell_exec(['dpkg-source', '-q', '--commit', '.', patch_name])
     
             # Make sure the patch was created
             if not code == 0:
