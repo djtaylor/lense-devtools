@@ -165,9 +165,6 @@ class LenseDebuild(LenseDBCommon):
         # Make sure the current directory exists
         self.mkdir('{0}/build/current'.format(self.pkgroot))
 
-        print 'LATEST: {0}'.format(latest)
-        print 'CURRENT: {0}'.format(self.current)
-
         # Clear out the old symbolic link
         if path.islink(self.current):
             unlink(self.current)
