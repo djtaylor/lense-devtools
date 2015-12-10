@@ -56,7 +56,7 @@ class LenseDebuild(LenseDBCommon):
 
         # Build output directory / current package
         self.bdir      = self.mkdir('{0}/build/{1}-{2}'.format(self.pkgroot, self.version, self.revision))
-        self.current   = '{0}/build/current/{1}_current_all.deb'.format(self.pkgroot, self.debpkg)
+        self.current   = '{0}/build/current/{1}_current_all.deb'.format(self.pkgroot, self.name)
 
         # Preflight OK
         return True
