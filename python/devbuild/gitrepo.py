@@ -52,7 +52,9 @@ class LenseGitRepo(LenseDBCommon):
         """
         if not self.exists_local:
             Repo.clone_from(self.remote, self.local)
-            self.feedback.success('Cloned repository: {0} -> {1}'.format(self.remote, self.local))
+            self.feedback.success('Cloned repository')
+            self.feedback.info('Remote: {0}'.format(self.remote))
+            self.feedback.info('Local: {0}'.format(self.local))
 
             # Store the Repo/Git objects
             self._git  = Git(self.local)

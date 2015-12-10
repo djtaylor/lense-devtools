@@ -43,9 +43,8 @@ class LenseDebuild(LenseDBCommon):
         
         :rtype: str
         """
-        capture = None
-        offset = self.shell_exec(['date', '%z'], stdout=capture)
-        return datetime.now().strftime('%a, %d %b %Y %H:%M:%S {0}'.format(offset.rstrip()))
+        offset = '+0000'
+        return datetime.now().strftime('%a, %d %b %Y %H:%M:%S {0}'.format(offset))
 
     def _set_changelog(self):
         """
@@ -62,7 +61,7 @@ class LenseDebuild(LenseDBCommon):
         comment   = '  * Building {0}-{1}{2}'.format(self.version, self.revision, user_msg)
         
         # Set the author line
-        author    = ' -- Developer <{0}@{1}> {2}'.format(getuser(), gethostname(), self.timestamp())
+        author    = ' -- Developer <{0}@{1}>  {2}'.format(getuser(), gethostname(), self.timestamp())
     
         # Create the file if it doesnt exist
         if not path.isfile(self.chlog):
@@ -78,7 +77,7 @@ class LenseDebuild(LenseDBCommon):
         with open(self.chlog, 'w') as f:
             f.write(entry)
             f.write(chlog_orig)
-        self.feedback.info('Appended to "{0}":\n{1}\n{2}\n'.format(self.chlog, '-' * 20, entry))
+        self.feedback.info('Appended to "{0}":\n{1}\n{2}'.format(self.chlog, '-' * 20, entry))
 
     def _set_revision(self):
         """
@@ -143,9 +142,6 @@ class LenseDebuild(LenseDBCommon):
         if path.islink(self.current):
             unlink(self.current)
         self.feedback.info('Current build packages: {0}'.format(self.current))
-
-        # Add to the build history
-        self._set_history('{0}_{1}-{2}'.format(self.name, self.version, self.revision))
 
     def run(self):
         """

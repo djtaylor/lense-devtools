@@ -22,28 +22,24 @@ class LenseDBCommon(object):
             makedirs(dir_path)
         return dir_path
         
-    def shell_exec(self, cmd, stdout=None):
+    def shell_exec(self, cmd, stdout=False):
         """
         Run an arbitrary shell command.
         """
         if not isinstance(cmd, list):
             raise Exception('"shell_exec" command argument must be a list')
         
-        kwargs = {}
-        
         # If capturing stdout
         if stdout:
-            kwargs['stdout': PIPE]
-        kwargs['stderr': PIPE]
+            proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        else:
+            proc = Popen(cmd, stderr=PIPE)
         
         # Run the command
-        proc = Popen(cmd, **kwargs)
         if stdout:
             out, err = proc.communicate()
-            stdout = out
+            return proc.returncode, out, err
         else:
             err = proc.communicate()
-        
-        # Return the exit code and stderr if any
-        return proc.returncode, err
+            return proc.returncode, err
         
