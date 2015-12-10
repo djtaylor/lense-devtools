@@ -79,7 +79,7 @@ class LenseDebuild(LenseDBCommon):
             environ['EDITOR'] = '/bin/true'
             
             # Run dpkg-source
-            code, out, err = self.shell_exec(['dpkg-source', '-q', '--commit', '.', patch_name])
+            code, err = self.shell_exec(['dpkg-source', '-q', '--commit', '.', patch_name])
     
             # Make sure the patch was created
             if not code == 0:
