@@ -38,6 +38,10 @@ class LenseDB(LenseDBCommon):
             # Has the repo been newly cloned or updated
             build = False if not (gitrepo.cloned or gitrepo.updated) else True
 
+            print('CLONED: {0}'.format(gitrepo.cloned))
+            print('UPDATED: {0}'.format(gitrepo.updated))
+            print('BUILD: {0}'.format(build))
+
             # Setup the build handler
             LenseDebuild(project['name'], project['git-local'], project['build-version'], build=build).run()
 
