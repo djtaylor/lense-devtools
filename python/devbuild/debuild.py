@@ -110,7 +110,7 @@ class LenseDebuild(LenseDBCommon):
             revision = f.readline().rstrip()
                 
         # Extract ID and number
-        rev_ex = compile(r'(^[a-zA-Z]*)([0-9]*$)')
+        rev_ex = compile(r'(^[a-zA-Z]*)([0-9]*::.*$)')
         rev_id = rev_ex.sub(r'\g<1>', revision)
         rev_num = rev_ex.sub(r'\<2>', revision)
                 
