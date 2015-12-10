@@ -22,6 +22,10 @@ class LenseGitRepo(LenseDBCommon):
         # Does the repo exists locally
         self.exists_local = False
 
+        # Has the repo been updated / cloned
+        self.updated = False
+        self.cloned  = False
+
     def _get_current_branch(self):
         """
         Get the checked out local branch.
@@ -56,6 +60,7 @@ class LenseGitRepo(LenseDBCommon):
 
             # Checkout the requested branch
             self._checkout(self.branch)
+            self.cloned = True
 
         # Local repo already exists
         else:
@@ -92,6 +97,13 @@ class LenseGitRepo(LenseDBCommon):
         """
         Pull changes from a remote repository.
         """
+        
+        # If the repo has just been cloned
+        if self.cloned:
+            self.feedback.info('Newly cloned repo, skipped pull')
+            return True
+        
+        # Refresh repo objects
         self._refresh()
 
         # Checkout the branch
@@ -107,6 +119,7 @@ class LenseGitRepo(LenseDBCommon):
 
         # If local is up to date
         if remote_commit == local_commit:
+            self.updated = True
             return self.feedback.info('Local matches remote, everything up to date'.format(local_commit, remote_commit))
 
         # Update the local branch

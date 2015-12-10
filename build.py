@@ -9,14 +9,14 @@ sys.path.append('{0}/python'.format(path.dirname(path.realpath(__file__))))
 # Devbuild Modules
 from devbuild.gitrepo import LenseGitRepo
 from devbuild.debuild import LenseDebuild
-from devbuild.common import LenseDevBuildCommon
+from devbuild.common import LenseDBCommon
 
-class LenseDevBuild(LenseDevBuildCommon):
+class LenseDB(LenseDBCommon):
     """
     Build all Lense projects from Github source code.
     """
     def __init__(self):
-        super(LenseDevBuild, self).__init__()
+        super(LenseDB, self).__init__()
 
     def run(self):
         """
@@ -38,5 +38,5 @@ class LenseDevBuild(LenseDevBuildCommon):
             LenseDebuild(project['name'], project['git-local'], project['build-version']).run()
 
 if __name__ == '__main__':
-    build = LenseDevBuild()
+    build = LenseDB()
     build.run()
