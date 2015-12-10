@@ -35,8 +35,11 @@ class LenseDB(LenseDBCommon):
             gitrepo = LenseGitRepo(project['git-local'], project['git-src'], project['name'], project['git-branch'])
             gitrepo.setup()
 
+            # Has the repo been newly cloned or updated
+            build = False if not (gitrepo.cloned or gitrepo.updated) else True
+
             # Setup the build handler
-            LenseDebuild(project['name'], project['git-local'], project['build-version'], updated=gitrepo.updated).run()
+            LenseDebuild(project['name'], project['git-local'], project['build-version'], build=build).run()
 
 if __name__ == '__main__':
     build = LenseDB()
