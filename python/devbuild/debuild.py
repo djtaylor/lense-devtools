@@ -40,7 +40,6 @@ class LenseDebuild(LenseDBCommon):
         if not self.build:
             self.feedback.info('Source code has not changed, skipping build')
             return False
-        
 
         # Revisions history / revision / changelog
         self.revisions = '{0}/revisions.txt'.format(self.root)
