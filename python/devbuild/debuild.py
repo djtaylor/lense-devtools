@@ -1,9 +1,9 @@
 import shutil
 import tarfile
 from re import compile
+from socket import getfqdn
 from getpass import getuser
 from datetime import datetime
-from socket import gethostname
 from os import chdir, path, unlink, symlink, environ
 from devbuild.common import LenseDBCommon
 
@@ -101,7 +101,7 @@ class LenseDebuild(LenseDBCommon):
         comment   = '  * Building {0}-{1}{2}'.format(self.version, self.revision, user_msg)
         
         # Set the author line
-        author    = ' -- Developer <{0}@{1}>  {2}'.format(getuser(), gethostname(), self.timestamp())
+        author    = ' -- Developer <{0}@{1}>  {2}'.format(getuser(), getfqdn(), self.timestamp())
     
         # Create the file if it doesnt exist
         if not path.isfile(self.chlog):
