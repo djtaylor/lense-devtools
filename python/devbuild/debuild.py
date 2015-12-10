@@ -4,7 +4,7 @@ from re import compile
 from getpass import getuser
 from datetime import datetime
 from socket import gethostname
-from os import chdir, path, unlink
+from os import chdir, path, unlink, symlink
 from devbuild.common import LenseDBCommon
 
 class LenseDebuild(LenseDBCommon):
@@ -141,6 +141,7 @@ class LenseDebuild(LenseDBCommon):
         # Clear out the old symbolic link
         if path.islink(self.current):
             unlink(self.current)
+        symlink(self.bdir, self.current)
         self.feedback.info('Current build packages: {0}'.format(self.current))
 
     def run(self):
