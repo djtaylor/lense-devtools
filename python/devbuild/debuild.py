@@ -121,7 +121,7 @@ class LenseDebuild(LenseDBCommon):
         # Extract ID and number
         rev_ex = compile(r'(^[a-zA-Z]*)([0-9]*::.*$)')
         rev_id = rev_ex.sub(r'\g<1>', revision)
-        rev_num = rev_ex.sub(r'\<2>', revision)
+        rev_num = rev_ex.sub(r'\g<2>', revision)
                 
         # Next revision
         rev_nxt = '{0}{1}'.format(rev_id, int(rev_num) + 1)
