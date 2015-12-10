@@ -97,11 +97,11 @@ class LenseDebuild(LenseDBCommon):
                 f.close()
         
         # Write to the changelog
-        entry = '{0}\n\n{1}\n\n{2}\n\n'.format(release, comment, author)
+        entry = '{0}\n\n{1}\n\n{2}'.format(release, comment, author)
         with open(self.chlog, 'w') as f:
-            f.write(entry)
+            f.write('{0}\n\n'.format(entry))
             f.write(chlog_orig)
-        self.feedback.info('Appended to "{0}":\n{1}\n{2}'.format(self.chlog, '-' * 20, entry))
+        self.feedback.info('Appended to "{0}":\n{1}\n{2}\n{3}'.format(self.chlog, '-' * 60, entry, '-' * 60))
 
     def _set_revision(self):
         """
