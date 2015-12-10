@@ -121,7 +121,6 @@ class LenseGitRepo(LenseDBCommon):
 
         # If local is up to date
         if remote_commit == local_commit:
-            self.updated = True
             return self.feedback.info('Local matches remote, everything up to date'.format(local_commit, remote_commit))
 
         # Update the local branch
@@ -133,6 +132,7 @@ class LenseGitRepo(LenseDBCommon):
 
         # Updated success
         self.feedback.success('Local branch updated -> {0}'.format(self._get_local_commit()))
+        self.updated = True
         
     def setup(self):
         """
