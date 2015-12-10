@@ -36,7 +36,7 @@ class LenseDB(LenseDBCommon):
             gitrepo.setup()
 
             # Setup the build handler
-            LenseDebuild(project['name'], project['git-local'], project['build-version']).run(gitrepo.updated)
+            LenseDebuild(project['name'], project['git-local'], project['build-version'], updated=gitrepo.updated).run()
 
 if __name__ == '__main__':
     build = LenseDB()
