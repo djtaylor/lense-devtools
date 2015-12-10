@@ -162,6 +162,9 @@ class LenseDebuild(LenseDBCommon):
         shutil.move(self.debpkg, build_file)
         self.feedback.success('Finished building {0}: {1}'.format(self.name, build_file))
 
+        # Make sure the current directory exists
+        self.mkdir('{0}/build/current'.format(self.pkgroot))
+
         # Clear out the old symbolic link
         if path.islink(self.current):
             unlink(self.current)
