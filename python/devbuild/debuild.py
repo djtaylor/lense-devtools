@@ -158,19 +158,21 @@ class LenseDebuild(LenseDBCommon):
         chdir(self.root)
 
         # Move to the builds directory
-        build_file = '{0}/{1}'.format(self.bdir, self.debpkg)
-        shutil.move(self.debpkg, build_file)
-        self.feedback.success('Finished building {0}: {1}'.format(self.name, build_file))
+        latest = '{0}/{1}'.format(self.bdir, self.debpkg)
+        shutil.move(self.debpkg, latest)
+        self.feedback.success('Finished building {0}: {1}'.format(self.name, latest))
 
         # Make sure the current directory exists
         self.mkdir('{0}/build/current'.format(self.pkgroot))
+
+        print 'LATEST: {0}'.format(latest)
+        print 'CURRENT: {0}'.format(self.current)
 
         # Clear out the old symbolic link
         if path.islink(self.current):
             unlink(self.current)
             
         # Link to the latest DEB
-        latest = '{0}/{1}'.format(self.bdir, self.debpkg)
         symlink(latest, self.current)
         self.feedback.info('Current build package: {0}'.format(self.current))
 
