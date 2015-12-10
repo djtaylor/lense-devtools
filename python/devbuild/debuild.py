@@ -1,10 +1,13 @@
 import shutil
 import tarfile
 from re import compile
+from getpass import getuser
+from datetime import datetime
+from socket import gethostname
 from os import chdir, path, unlink
-from devbuild.common import LenseDevBuildCommon
+from devbuild.common import LenseDBCommon
 
-class LenseDebuild(LenseDevBuildCommon):
+class LenseDebuild(LenseDBCommon):
     """
     Helper class for building a debian package from a project.
     """
@@ -12,72 +15,106 @@ class LenseDebuild(LenseDevBuildCommon):
         super(LenseDebuild, self).__init__()
         
         # Name / root / source / version / revision
-        self.name     = name
-        self.root     = '{0}/{1}'.format(self.pkgroot, root)
-        self.src      = '{0}/{1}'.format(self.root, name)
-        self.version  = version
-        self.revision = self._next_revision()
+        self.name      = name
+        self.root      = '{0}/{1}'.format(self.pkgroot, root)
+        self.src       = '{0}/{1}'.format(self.root, name)
+        self.version   = version
 
-        # History file
-        self.history  = '{0}/build_history.txt'.format(self.root)
+        # History file / revision / changelog
+        self.revisions = '{0}/revisions.txt'.format(self.root)
+        self.revision  = self._set_revision()
+        self.chlog     = '{0}/debian/changelog'.format(self.src)
 
         # Define the source tarball
-        self.tarball  = '{0}_{1}.orig.tar.gz'.format(self.name, self.version)
-        self.tarpath  = '{0}/{1}'.format(self.root, self.tarball)
+        self.tarball   = '{0}_{1}.orig.tar.gz'.format(self.name, self.version)
+        self.tarpath   = '{0}/{1}'.format(self.root, self.tarball)
 
         # Define the output debian package
-        self.debpkg   = '{0}_{1}_{2}_all.deb'.format(self.name, self.version, self.revision)
-        self.debpath  = '{0}/{1}'.format(self.root, self.debpkg)
+        self.debpkg    = '{0}_{1}-{2}_all.deb'.format(self.name, self.version, self.revision)
+        self.debpath   = '{0}/{1}'.format(self.root, self.debpkg)
 
         # Build output directory
-        self.bdir     = self.mkdir('{0}/build/{1}'.format(self.pkgroot, self.version))
+        self.bdir      = self.mkdir('{0}/build/{1}-{2}'.format(self.pkgroot, self.version, self.revision))
+        self.current   = '{0}/build/current'.format(self.pkgroot)
 
-    def _next_revision(self):
+    def timestamp(self):
+        """
+        Get a Debian style timestamp.
+        
+        :rtype: str
+        """
+        capture = None
+        offset = self.shell_exec(['date', '%z'], stdout=capture)
+        return datetime.now().strftime('%a, %d %b %Y %H:%M:%S {0}'.format(offset.rstrip()))
+
+    def _set_changelog(self):
+        """
+        Set the next changelog entry prior to building.
+        """
+        release   = '{0} ({1}-{2}) trusty; urgency=low'.format(self.name, self.version, self.revision)
+        
+        # Get a user message
+        self.feedback.input('Enter an optional changelog message: ', 'changelog_msg', default=None)
+        user_rsp = self.feedback.get_response('changelog_msg')
+        user_msg = '' if not user_rsp else '\n  * {0}'.format(user_rsp)
+        
+        # Set the changelog comment
+        comment   = '  * Building {0}-{1}{2}'.format(self.version, self.revision, user_msg)
+        
+        # Set the author line
+        author    = ' -- Developer <{0}@{1}> {2}'.format(getuser(), gethostname(), self.timestamp())
+    
+        # Create the file if it doesnt exist
+        if not path.isfile(self.chlog):
+            chlog_orig = ''
+        else:
+            # Get the current changelog
+            with open(self.chlog, 'r') as f:
+                chlog_orig = f.read()
+                f.close()
+        
+        # Write to the changelog
+        entry = '{0}\n\n{1}\n\n{2}\n\n'.format(release, comment, author)
+        with open(self.chlog, 'w') as f:
+            f.write(entry)
+            f.write(chlog_orig)
+        self.feedback.info('Appended to "{0}":\n{1}\n{2}\n'.format(self.chlog, '-' * 20, entry))
+
+    def _set_revision(self):
         """
         Get the next revision number
         """
+        revision = None
+        if not path.isfile(self.revisions):
+            self.feedback.info('Building base revision -> dev0')
+            with open(self.revisions, 'w') as f:
+                f.write('dev0:: {0}'.format(self.timestamp()))
+            return 'dev0'
         
-        # No history file present (revision 1)
-        if not path.isfile(self.history):
-            return '1'
-        
-        # Get the latest revision
-        last = None
-        with open(self.history, 'r') as f:
-            for l in f.readlines():
-                last = l
-        
-        # Extract the last revision
-        return compile(r'^[^_]_[^_]*_(.*$)'.format(self.name)).sub(r'\g<1>', last)
+        # Open the revisions file
+        with open(self.revisions, 'r') as f:
+            revision = f.readline().rstrip()
+                
+        # Extract ID and number
+        rev_ex = compile(r'(^[a-zA-Z]*)([0-9]*$)')
+        rev_id = rev_ex.sub(r'\g<1>', revision)
+        rev_num = rev_ex.sub(r'\<2>', revision)
+                
+        # Next revision
+        rev_nxt = '{0}{1}'.format(rev_id, int(rev_num) + 1)
+        self.feedback.info('Building next revision -> {0}'.format(rev_nxt))
+        return rev_nxt
 
-    def _set_history(self, entry):
+    def _tar_source(self):
         """
-        Set a build history entry for the project.
-        
-        <package>-<version>-<revision>
-        
-        :param entry: The history entry for this package
-        :type  entry: str
+        Compress the source directory for the base revision.
         """
-        
-        # New history file
-        if not path.isfile(self.history):
-            open(history_file, 'w').close()
-            self.feedback.info('Initializing build history: {0}'.format(self.history))
-
-        # Write the new history entry
-        with open(self.history, 'a') as f:
-            f.write(entry)
-            self.feedback.info('Build history now at: {0}'.format(entry))
-
-    def _tar_src(self):
-        """
-        Compress the source directory.
-        """
-        chdir(self.root)
-        with tarfile.open(self.tarball, 'w:gz') as tar:
-            tar.add(self.name)
-        self.feedback.info('Created source tarball: {0}'.format(self.tarball))
+        if self.revision == 'dev0':
+            chdir(self.root)
+            with tarfile.open(self.tarball, 'w:gz') as tar:
+                tar.add(self.name)
+            return self.feedback.info('Created source tarball: {0}'.format(self.tarball))
+        self.feedback.info('Found source tarball: {0}'.format(self.tarball))
         
     def _debuild(self):
         """
@@ -102,17 +139,22 @@ class LenseDebuild(LenseDevBuildCommon):
         shutil.move(self.debpkg, build_file)
         self.feedback.success('Finished building {0}: {1}'.format(self.name, build_file))
 
+        # Clear out the old symbolic link
+        if path.islink(self.current):
+            unlink(self.current)
+        self.feedback.info('Current build packages: {0}'.format(self.current))
+
         # Add to the build history
-        self._set_history('{0}_{1}_{2}'.format(self.name, self.version, self.revision))
+        self._set_history('{0}_{1}-{2}'.format(self.name, self.version, self.revision))
 
     def run(self):
         """
         Public method for starting the build process
         """
-        if path.isfile(self.tarpath):
-            self.feedback.info('Clearing old source archive...')
-            unlink(self.tarpath)
+
+        # Update the changelog
+        self._set_changelog()
 
         # Create the source tarball and build the debian package
-        self._tar_src()
+        self._tar_source()
         self._debuild()

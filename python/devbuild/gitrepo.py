@@ -1,8 +1,8 @@
 from os import path
 from git import Repo, Git
-from devbuild.common import LenseDevBuildCommon
+from devbuild.common import LenseDBCommon
 
-class LenseGitRepo(LenseDevBuildCommon):
+class LenseGitRepo(LenseDBCommon):
     """
     Helper class for retrieving a lense project repository.
     """

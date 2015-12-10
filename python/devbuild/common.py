@@ -3,7 +3,7 @@ from feedback import Feedback
 from json import load as json_load
 from subprocess import Popen, PIPE
 
-class LenseDevBuildCommon(object):
+class LenseDBCommon(object):
     """
     Common class for the development buider modules.
     """
@@ -14,17 +14,6 @@ class LenseDevBuildCommon(object):
         self.feedback = Feedback()
         self.projects = json_load(open('{0}/projects.json'.format(self.pkgroot), 'r'))
         
-    def load_history(self, file):
-        """
-        Load the local history of builds.
-        """
-        history = []
-        
-        # Read the history line by line
-        with open(file, 'r') as f:
-            for l in f.readlines():
-                print 'HISTORY: {0}'.format(l)
-        
     def mkdir(self, dir_path):
         """
         Make a directory and return the path name.
@@ -33,16 +22,27 @@ class LenseDevBuildCommon(object):
             makedirs(dir_path)
         return dir_path
         
-    def shell_exec(self, cmd, show_stdout=False):
+    def shell_exec(self, cmd, stdout=None):
         """
         Run an arbitrary shell command.
         """
         if not isinstance(cmd, list):
             raise Exception('"shell_exec" command argument must be a list')
         
+        kwargs = {}
+        
+        # If capturing stdout
+        if stdout:
+            kwargs['stdout': PIPE]
+        kwargs['stderr': PIPE]
+        
         # Run the command
-        proc = Popen(cmd, stderr=PIPE)
-        err  = proc.communicate()
+        proc = Popen(cmd, **kwargs)
+        if stdout:
+            out, err = proc.communicate()
+            stdout = out
+        else:
+            err = proc.communicate()
         
         # Return the exit code and stderr if any
         return proc.returncode, err
