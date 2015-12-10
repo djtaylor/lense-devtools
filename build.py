@@ -32,10 +32,11 @@ class LenseDB(LenseDBCommon):
             ], 'BUILD')
 
             # Setup the source code repositry
-            LenseGitRepo(project['git-local'], project['git-src'], project['name'], project['git-branch']).setup()
+            gitrepo = LenseGitRepo(project['git-local'], project['git-src'], project['name'], project['git-branch'])
+            gitrepo.setup()
 
             # Setup the build handler
-            LenseDebuild(project['name'], project['git-local'], project['build-version']).run()
+            LenseDebuild(project['name'], project['git-local'], project['build-version']).run(gitrepo.updated)
 
 if __name__ == '__main__':
     build = LenseDB()

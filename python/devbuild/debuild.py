@@ -11,16 +11,28 @@ class LenseDebuild(LenseDBCommon):
     """
     Helper class for building a debian package from a project.
     """
-    def __init__(self, name, root, version):
+    def __init__(self, name, root, version, updated=False):
         super(LenseDebuild, self).__init__()
         
-        # Name / root / source / version / revision
+        # Has the repo been updated
+        self.updated   = updated
+
+        # Name / root / source / version
         self.name      = name
         self.root      = '{0}/{1}'.format(self.pkgroot, root)
         self.src       = '{0}/{1}'.format(self.root, name)
         self.version   = version
 
-        # History file / revision / changelog
+    def _preflight(self):
+        """
+        Run preflight checks prior to building.
+        """
+        if not self.updated:
+            self.feedback.info('Source code has not changed, skipping build')
+            return False
+        
+
+        # Revisions history / revision / changelog
         self.revisions = '{0}/revisions.txt'.format(self.root)
         self.revision  = self._set_revision()
         self.chlog     = '{0}/debian/changelog'.format(self.src)
@@ -33,9 +45,12 @@ class LenseDebuild(LenseDBCommon):
         self.debpkg    = '{0}_{1}-{2}_all.deb'.format(self.name, self.version, self.revision)
         self.debpath   = '{0}/{1}'.format(self.root, self.debpkg)
 
-        # Build output directory
+        # Build output directory / current package
         self.bdir      = self.mkdir('{0}/build/{1}-{2}'.format(self.pkgroot, self.version, self.revision))
-        self.current   = '{0}/build/current'.format(self.pkgroot)
+        self.current   = '{0}/build/current/{0}_current_all.deb'.format(self.pkgroot, self.debpkg)
+
+        # Preflight OK
+        return True
 
     def timestamp(self):
         """
@@ -141,13 +156,20 @@ class LenseDebuild(LenseDBCommon):
         # Clear out the old symbolic link
         if path.islink(self.current):
             unlink(self.current)
-        symlink(self.bdir, self.current)
-        self.feedback.info('Current build packages: {0}'.format(self.current))
+            
+        # Link to the latest DEB
+        latest = '{0}/{1}'.format(self.bdir, self.debpkg)
+        symlink(latest, self.current)
+        self.feedback.info('Current build package: {0}'.format(self.current))
 
     def run(self):
         """
         Public method for starting the build process
         """
+
+        # Preflight checks
+        if not self._preflight():
+            return None
 
         # Update the changelog
         self._set_changelog()
