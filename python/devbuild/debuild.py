@@ -11,11 +11,21 @@ class LenseDebuild(LenseDBCommon):
     """
     Helper class for building a debian package from a project.
     """
-    def __init__(self, name, root, version, updated=False):
+    def __init__(self, name, root, version, build=False):
+        """
+        :param    name: The project name (i.e., lense-engine)
+        :type     name: str
+        :param    root: The project build root
+        :type     root: str
+        :param version: The version to build (without revision)
+        :type  version: str
+        :param   build: Should we build or not
+        :type    build: bool
+        """
         super(LenseDebuild, self).__init__()
         
-        # Has the repo been updated
-        self.updated   = updated
+        # Should we build or not (repo newly cloned or updated)
+        self.build     = build
 
         # Name / root / source / version
         self.name      = name
@@ -27,7 +37,7 @@ class LenseDebuild(LenseDBCommon):
         """
         Run preflight checks prior to building.
         """
-        if not self.updated:
+        if not self.build:
             self.feedback.info('Source code has not changed, skipping build')
             return False
         
