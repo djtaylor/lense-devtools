@@ -102,7 +102,7 @@ class DevToolsInterface(DevToolsCommon):
         """
         Build either all projects or specified projects.
         """
-        use_projects = self.args.get('projects', '').split(',')
+        use_projects = self.args.get('projects', None)
         
         # Building all projects
         if not use_projects:
@@ -111,6 +111,7 @@ class DevToolsInterface(DevToolsCommon):
              
         # Building specific projects   
         else:
+            use_projects = use_projects.split(',')
             
             # Make sure project names are valid
             for project in use_projects:
