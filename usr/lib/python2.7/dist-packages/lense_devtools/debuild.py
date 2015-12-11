@@ -151,8 +151,8 @@ class DevToolsDebuild(DevToolsCommon):
             return self.targz(self.tarball, self.name, workdir=self.root)
         
         # Next revision, tar file should be present
-        if not path.isfile(self.tarball):
-            self.die('Could not locate original source tarball: {0}'.format(self.tarball))
+        if not path.isfile(self.path):
+            self.die('Could not locate original source tarball: {0}'.format(self.tarpath))
         self.feedback.info('Found source tarball: {0}'.format(self.tarball))
         
     def _debuild(self):
