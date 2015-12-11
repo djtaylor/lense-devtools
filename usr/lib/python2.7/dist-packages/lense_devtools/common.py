@@ -82,7 +82,7 @@ class DevToolsCommon(object):
         """
         if not 'WORKSPACE' in self.config:
             self.die('Missing required <WORKSPACE> key in: {0}'.format(self.config))
-        return self.config['WORKSPACE']
+        return self.mkdir(path.expanduser('~/{0}'.format(self.config['WORKSPACE'])))
         
     def die(self, message='An error ocurred', code=1):
         """
