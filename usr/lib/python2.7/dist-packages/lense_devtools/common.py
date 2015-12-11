@@ -27,7 +27,7 @@ class DevToolsCommon(object):
         """
         config = '/etc/lense_devtools/config.json'
         if not path.isfile(self.config):
-            raise Exception('Configuration file missing: <{0}> not found'.format(self.config))
+            raise Exception('Configuration file missing: <{0}> not found'.format(config))
         
         try:
             return json_loads(open(config, 'r').read())
