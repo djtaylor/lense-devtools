@@ -1,3 +1,4 @@
+from glob import glob
 from json import loads as json_loads
 from getpass import getuser
 from os import path, listdir, unlink
@@ -94,27 +95,6 @@ class DevToolsInterface(DevToolsCommon):
             'VERSION: {0}'.format(attrs.get('version'))
         ], 'BUILD')
         
-    def _build_project(self, project, attrs):
-        """
-        Build a single project.
-        
-        :param project: The project ID
-        :type  project: str
-        :param   attrs: Project attributes
-        :type    attrs: dict
-        """
-        self._summarize(project, attrs)
-        
-        # Setup the source code repositry
-        gitrepo = DevToolsGitRepo(project, attrs, automode=self.args.get('auto', False))
-        gitrepo.setup()
-
-        # Has the repo been newly cloned or updated
-        build = False if not (gitrepo.cloned or gitrepo.updated) else True
-
-        # Setup the build handler
-        DevToolsDebuild(project, attrs, build=build, automode=self.args.get('auto', False)).run()
-        
     def _install(self):
         """
         Install or upgrade all or specific packages in the current builds directory.
@@ -123,7 +103,7 @@ class DevToolsInterface(DevToolsCommon):
         
         # Installing all projects
         if not use_projects:
-            code, err = self.shell(['sudo', 'dpkg', '-i', path.expanduser('~/.lense_devtools/build/current/*')])
+            code, err = self.shell(['sudo', 'dpkg', '-i', glob(path.expanduser('~/.lense_devtools/build/current/*'))])
             
             # Failed to install 
             if not code == 0:
@@ -145,6 +125,27 @@ class DevToolsInterface(DevToolsCommon):
                 # Failed to install 
                 if not code == 0:
                     self.die('Failed to install project <{0}> package: {1}'.format(project, str(err)))
+        
+    def _build_project(self, project, attrs):
+        """
+        Build a single project.
+        
+        :param project: The project ID
+        :type  project: str
+        :param   attrs: Project attributes
+        :type    attrs: dict
+        """
+        self._summarize(project, attrs)
+        
+        # Setup the source code repositry
+        gitrepo = DevToolsGitRepo(project, attrs, automode=self.args.get('auto', False))
+        gitrepo.setup()
+
+        # Has the repo been newly cloned or updated
+        build = False if not (gitrepo.cloned or gitrepo.updated) else True
+
+        # Setup the build handler
+        DevToolsDebuild(project, attrs, build=build, automode=self.args.get('auto', False)).run()
         
     def _build(self):
         """
