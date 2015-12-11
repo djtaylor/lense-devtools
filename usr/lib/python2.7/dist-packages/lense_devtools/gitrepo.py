@@ -27,12 +27,19 @@ class DevToolsGitRepo(DevToolsCommon):
         self._repo   = None
         self._git    = None
 
-        # Does the repo exist locally
-        self.exists  = False
-
         # Has the repo been updated / cloned
         self.updated = False
         self.cloned  = False
+
+    def _exists(self):
+        """
+        Check if the local repo exists (path exists and is not empty)
+        """
+        if not path.isdir(self.local):
+            return False
+        if not listdir(self.local):
+            return False
+        return True
 
     def _get_current_branch(self):
         """
@@ -58,7 +65,7 @@ class DevToolsGitRepo(DevToolsCommon):
         """
         Clone a remote repository.
         """
-        if not self.exists:
+        if not self._exists():
             Repo.clone_from(self.remote, self.local)
             self.feedback.success('Cloned repository')
             self.feedback.info('Remote: {0}'.format(self.remote))
@@ -146,7 +153,6 @@ class DevToolsGitRepo(DevToolsCommon):
         """
         Construct information about the repository.
         """
-        self.exists = False if not path.isdir(self.local) else True
 
         # Make sure the repo exists locally
         self._clone()
