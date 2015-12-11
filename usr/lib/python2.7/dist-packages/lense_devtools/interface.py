@@ -95,6 +95,21 @@ class DevToolsInterface(DevToolsCommon):
             'VERSION: {0}'.format(attrs.get('version'))
         ], 'BUILD')
         
+    def _install_pkg(self, pkg):
+        """
+        Install a debian package.
+        
+        :param pkg: The package path
+        :type  pkg: str
+        """
+        code, err = self.shell(['sudo', 'dpkg', '-i', pkg])
+        
+        # Failed to install package
+        if not code == 0:
+            self.feedback.block(err, 'ERROR')
+            self.die('Failed to install package: {0}'.format(pkg))
+        self.feedback.success('Installed/updated package: {0}'.format(pkg))
+        
     def _install(self):
         """
         Install or upgrade all or specific packages in the current builds directory.
@@ -103,11 +118,8 @@ class DevToolsInterface(DevToolsCommon):
         
         # Installing all projects
         if not use_projects:
-            code, err = self.shell(['sudo', 'dpkg', '-i', glob(path.expanduser('~/.lense_devtools/build/current/*'))])
-            
-            # Failed to install 
-            if not code == 0:
-                self.die('Failed to install project packages: {0}'.format(str(err)))
+            for pkg in glob(path.expanduser('~/.lense_devtools/build/current/*')):
+                self._install_pkg(pkg)
         
         # Install specific projects
         else:
@@ -120,11 +132,7 @@ class DevToolsInterface(DevToolsCommon):
     
             # Build each project
             for project in use_projects:
-                code, err =self.shell(['sudo', 'dpkg', '-i', path.expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project))])
-        
-                # Failed to install 
-                if not code == 0:
-                    self.die('Failed to install project <{0}> package: {1}'.format(project, str(err)))
+                self._install_pkg(path.expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project)))
         
     def _build_project(self, project, attrs):
         """
