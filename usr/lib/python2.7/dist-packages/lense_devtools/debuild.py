@@ -90,7 +90,7 @@ class DevToolsDebuild(DevToolsCommon):
         release   = '{0} ({1}-{2}) trusty; urgency=low'.format(self.name, self.version, self.revision)
         
         # Get a user message if not automated
-        user_msp = ''
+        user_msg = ''
         if not self.automode:
             self.feedback.input('Enter an optional changelog message: ', 'changelog_msg', default=None)
             user_rsp = self.feedback.get_response('changelog_msg')
