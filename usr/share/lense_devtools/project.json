@@ -1,0 +1,17 @@
+{
+	"supported": [
+		"lense-common", 
+		"lense-engine", 
+		"lense-portal", 
+		"lense-client", 
+		"lense-socket"
+	],
+	"attributes": {
+		"optional": ["git-local"],
+		"required": [
+			"git-src",
+			"git-branch",
+			"version"
+		]
+	}	
+}

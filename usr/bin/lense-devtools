@@ -1,0 +1,5 @@
+#!/usr/bin/env python
+import lense_devbuild
+
+if __name__ == '__main__':
+    lense_devbuild.run()

@@ -1,0 +1,36 @@
+{
+	"WORKSPACE": "/var/local/lense_devtools/",
+	"DISABLED": [],
+	"PROJECTS": {
+		"lense-common": {
+	        "git-src": "https://github.com/djtaylor/lense-common.git",
+	        "git-branch": "dev",
+	        "git-local": "src/lense-common",
+	        "version": "0.1.1"
+		},
+		"lense-engine": {
+	        "git-src": "https://github.com/djtaylor/lense-engine.git",
+	        "git-branch": "dev",
+	        "git-local": "src/lense-engine",
+	        "version": "0.1.1"
+		},
+		"lense-client": {
+	        "git-src": "https://github.com/djtaylor/lense-client.git",
+	        "git-branch": "dev",
+	        "git-local": "src/lense-client",
+	        "version": "0.1.1"
+		},
+		"lense-portal": {
+	        "git-src": "https://github.com/djtaylor/lense-portal.git",
+	        "git-branch": "dev",
+	        "git-local": "src/lense-portal",
+	        "version": "0.1.1"
+		},
+		"lense-socket": {
+	        "git-src": "https://github.com/djtaylor/lense-socket.git",
+	        "git-branch": "dev",
+	        "git-local": "src/lense-socket",
+	        "version": "0.1.1"
+		}
+	}
+}

@@ -1,0 +1,5 @@
+usr/bin/lense-devtools usr/bin
+usr/share/lense_devtools usr/share/
+var/local/lense_devtools var/local/
+usr/lib/python2.7/dist-packages/lense_devtools usr/lib/python2.7/dist-packages/
+etc/lense_devtools etc/

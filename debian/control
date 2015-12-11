@@ -1,0 +1,17 @@
+Source: lense-devtools
+Section: python
+Priority: optional
+Maintainer: David Taylor <djtaylor13@gmail.com>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+Homepage: https://github.com/djtaylor/lense-devtools
+Vcs-Git: git://github.com/djtaylor/lense-devtools.git
+Vcs-Browser: https://github.com/djtaylor/lense-devtools
+X-Python-Version: >= 2.7
+
+Package: lense-devtools
+Architecture: all
+Depends: build-essential (>= 11.6),
+		 devscripts (>= 2.14.1),
+		 git (>= 1.9.1)
+Description: Lense development tools.
