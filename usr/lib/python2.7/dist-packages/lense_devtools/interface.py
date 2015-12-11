@@ -71,7 +71,7 @@ class DevToolsInterface(DevToolsCommon):
                 self.die('Workspace <{0}> is not writeable, please check permissions'.format(self.workspace))
         
             # Validate / create the config
-            self._init_config()
+            self._init_config(init_config)
         
         # Workspace doesn't exist yet
         else:
