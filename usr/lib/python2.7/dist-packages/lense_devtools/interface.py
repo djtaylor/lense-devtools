@@ -124,6 +124,10 @@ class DevToolsInterface(DevToolsCommon):
         # Installing all projects
         if not use_projects:
             code, err = self.shell(['sudo', 'dpkg', '-i', path.expanduser('~/.lense_devtools/build/current/*')])
+            
+            # Failed to install 
+            if not code == 0:
+                self.die('Failed to install project packages: {0}'.format(str(err)))
         
         # Install specific projects
         else:
@@ -137,6 +141,10 @@ class DevToolsInterface(DevToolsCommon):
             # Build each project
             for project in use_projects:
                 code, err =self.shell(['sudo', 'dpkg', '-i', path.expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project))])
+        
+                # Failed to install 
+                if not code == 0:
+                    self.die('Failed to install project <{0}> package: {1}'.format(project, str(err)))
         
     def _build(self):
         """
