@@ -1,5 +1,5 @@
 from sys import argv, exit
-from argparse import ArgumentParser, RawDescriptionHelpFormatter
+from argparse import ArgumentParser, RawTextHelpFormatter
 
 class DevToolsArgs(object):
     """
