@@ -18,7 +18,6 @@ class DevToolsCommon(object):
         self.workspace = self._get_workspace()
         self.projects  = self._get_projects()
         self.disabled  = self._get_disabled()
-        self.automode  = self.args.get('auto', False)
         
     def _get_config(self):
         """
