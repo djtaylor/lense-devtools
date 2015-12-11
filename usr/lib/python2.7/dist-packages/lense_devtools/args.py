@@ -54,6 +54,7 @@ class DevToolsArgs(object):
         
         # Argument flags
         self.parser.add_argument('-p', '--projects', help='A single project or comma seperated list of projects', action='append')
+        self.parser.add_argument('-a', '--auto', help='Run in automated mode (avoid prompts)', action='store_true')
         
         # Parse arguments
         argv.pop(0)

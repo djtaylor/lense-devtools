@@ -88,10 +88,12 @@ class DevToolsDebuild(DevToolsCommon):
         """
         release   = '{0} ({1}-{2}) trusty; urgency=low'.format(self.name, self.version, self.revision)
         
-        # Get a user message
-        self.feedback.input('Enter an optional changelog message: ', 'changelog_msg', default=None)
-        user_rsp = self.feedback.get_response('changelog_msg')
-        user_msg = '' if not user_rsp else '\n  * {0}'.format(user_rsp)
+        # Get a user message if not automated
+        user_msp = ''
+        if not self.automode:
+            self.feedback.input('Enter an optional changelog message: ', 'changelog_msg', default=None)
+            user_rsp = self.feedback.get_response('changelog_msg')
+            user_msg = '' if not user_rsp else '\n  * {0}'.format(user_rsp)
         
         # Set the changelog comment
         comment   = '  * Building {0}-{1}{2}'.format(self.version, self.revision, user_msg)
