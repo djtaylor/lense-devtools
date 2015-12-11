@@ -1,12 +1,20 @@
-# Lense Development Package Builder
+# Lense Development Tools
 
-Helper package for building development version of Lense projects. Currently this has been tested on Ubuntu 14 LTS.
+Tools used to assist developers and contributors to the Lense project. Features currently include:
 
-Builds the following:
+ - Local .deb package builder
+ - Automated revisioning
+
+### Builds
+
  - Lense Common <https://github.com/djtaylor/lense-common>
  - Lense Client <https://github.com/djtaylor/lense-client>
  - Lense Engine <https://github.com/djtaylor/lense-engine>
  - Lense Portal <https://github.com/djtaylor/lense-portal>
+
+### Developers
+
+Base configured to use Lense repos as a source, but can be customized for forks and branches via JSON.
 
 ### Dependencies
 
