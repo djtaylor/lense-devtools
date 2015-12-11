@@ -1,6 +1,6 @@
 from json import loads as json_loads
 from getpass import getuser
-from os import path, listdir, unlink, expanduser
+from os import path, listdir, unlink
 from lense_devtools.args import DevToolsArgs
 from lense_devtools.common import DevToolsCommon
 from lense_devtools.gitrepo import DevToolsGitRepo
@@ -123,7 +123,7 @@ class DevToolsInterface(DevToolsCommon):
         
         # Installing all projects
         if not use_projects:
-            code, err = self.shell(['sudo', 'dpkg', '-i', expanduser('~/.lense_devtools/build/current/*')])
+            code, err = self.shell(['sudo', 'dpkg', '-i', path.expanduser('~/.lense_devtools/build/current/*')])
         
         # Install specific projects
         else:
@@ -136,7 +136,7 @@ class DevToolsInterface(DevToolsCommon):
     
             # Build each project
             for project in use_projects:
-                code, err =self.shell(['sudo', 'dpkg', '-i', expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project))])
+                code, err =self.shell(['sudo', 'dpkg', '-i', path.expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project))])
         
     def _build(self):
         """
