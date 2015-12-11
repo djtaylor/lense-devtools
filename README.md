@@ -5,6 +5,14 @@ Tools used to assist developers and contributors to the Lense project. Features 
  - Local .deb package builder
  - Automated revisioning
 
+### Requirements
+
+The following packages should be installed with python-pip:
+
+```sh
+$ sudo pip install GitPython feedback
+```
+
 ### Builds
 
  - Lense Common <https://github.com/djtaylor/lense-common>
