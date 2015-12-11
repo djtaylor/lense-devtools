@@ -18,8 +18,9 @@ class DevToolsGitRepo(DevToolsCommon):
         # Project name
         self.name    = project
         
-        # Local / remote / branch
-        self.local   = self.mkdir('{0}/{1}/{2}'.format(self.workspace, attrs.get('git-local', 'src/{0}'.format(project)), project))
+        # Root / local / remote / branch
+        self.root    = self.mkdir('{0}/{1}'.format(self.workspace, attrs.get('git-local', 'src/{0}'.format(project))))
+        self.local   = '{0}/{1}'.format(self.root, project)
         self.remote  = attrs.get('git-remote')
         self.branch  = attrs.get('git-branch')
 
