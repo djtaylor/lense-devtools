@@ -77,6 +77,22 @@ class DevToolsInterface(DevToolsCommon):
         else:
             self.die('Workspace <{0}> not found, please create and set appropriate permissions'.format(self.workspace))
         
+    def _summarize(self, project, attrs):
+        """
+        Display a build summary.
+        
+        :param project: The project name
+        :type  project: str
+        :param   attrs: Project attributes
+        :type    attrs: dict
+        """
+        self.feedback.block([
+            'PROJECT: {0}'.format(project),
+            'REMOTE:  {0}'.format(attrs.get('git-remote')),
+            'BRANCH:  {0}'.format(attrs.get('git-branch')),
+            'LOCAL:   {0}'.format(attrs.get('git-local', '{0}/src/{1}'.format(self.workspace, project))),
+            'VERSION: {0}'.format(attrs.get('version'))
+        ], 'BUILD')
         
     def _build_project(self, project, attrs):
         """
@@ -87,6 +103,7 @@ class DevToolsInterface(DevToolsCommon):
         :param   attrs: Project attributes
         :type    attrs: dict
         """
+        self._summarize(project, attrs)
         
         # Setup the source code repositry
         gitrepo = DevToolsGitRepo(project, attrs)
