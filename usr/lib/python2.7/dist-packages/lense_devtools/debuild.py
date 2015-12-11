@@ -9,7 +9,7 @@ class DevToolsDebuild(DevToolsCommon):
     """
     Helper class for building a debian package from a project.
     """
-    def __init__(self, project, attrs, build=False):
+    def __init__(self, project, attrs, build=False, automode=False):
         """
         :param project: The project name
         :type  project: str
@@ -20,8 +20,9 @@ class DevToolsDebuild(DevToolsCommon):
         """
         super(DevToolsDebuild, self).__init__()
         
-        # Should we build or not (repo newly cloned or updated)
+        # Should we build or not (repo newly cloned or updated) / auto mode (avoid prompts)
         self.build     = build
+        self.automode  = automode
 
         # Name / root / source / version
         self.name      = project

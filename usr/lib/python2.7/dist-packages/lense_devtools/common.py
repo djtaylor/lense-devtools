@@ -4,7 +4,6 @@ from feedback import Feedback
 from subprocess import Popen, PIPE
 from json import loads as json_loads
 from shutil import move as move_file
-from lense_devtools.args import DevToolsArgs
 from os import path, makedirs, unlink, symlink, chdir, getcwd
 
 class DevToolsCommon(object):
@@ -13,9 +12,6 @@ class DevToolsCommon(object):
     """
     def __init__(self):
         self.feedback  = Feedback()
-        
-        # Load arguments
-        self.args      = DevToolsArgs()
         
         # Configuration / workspace / projects / disabled projects / auto mode
         self.config    = self._get_config()

@@ -1,6 +1,7 @@
 from os import path, listdir, unlink
 from json import loads as json_loads
 from getpass import getuser
+from lense_devtools.args import DevToolsArgs
 from lense_devtools.common import DevToolsCommon
 from lense_devtools.gitrepo import DevToolsGitRepo
 from lense_devtools.debuild import DevToolsDebuild
@@ -11,6 +12,9 @@ class DevToolsInterface(DevToolsCommon):
     """
     def __init__(self):
         super(DevToolsInterface, self).__init__()
+        
+        # Load arguments
+        self.args    = DevToolsArgs()
         
         # Main command
         self.command = self.args.get('command')
@@ -102,14 +106,14 @@ class DevToolsInterface(DevToolsCommon):
         self._summarize(project, attrs)
         
         # Setup the source code repositry
-        gitrepo = DevToolsGitRepo(project, attrs)
+        gitrepo = DevToolsGitRepo(project, attrs, automode=self.args.get('auto', False))
         gitrepo.setup()
 
         # Has the repo been newly cloned or updated
         build = False if not (gitrepo.cloned or gitrepo.updated) else True
 
         # Setup the build handler
-        DevToolsDebuild(project, attrs, build=build).run()
+        DevToolsDebuild(project, attrs, build=build, automode=self.args.get('auto', False)).run()
         
     def _build(self):
         """

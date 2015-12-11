@@ -6,7 +6,7 @@ class DevToolsGitRepo(DevToolsCommon):
     """
     Helper class for retrieving a lense project repository.
     """
-    def __init__(self, project, attrs):
+    def __init__(self, project, attrs, automode=False):
         """
         :param project: The project name
         :type  project: str
@@ -15,21 +15,24 @@ class DevToolsGitRepo(DevToolsCommon):
         """
         super(DevToolsGitRepo, self).__init__()
         
+        # Auto mode (avoid prompts)
+        self.automode = automode
+        
         # Project name
-        self.name    = project
+        self.name     = project
         
         # Local / remote / branch
-        self.local   = self.mkdir('{0}/{1}/{2}'.format(self.workspace, attrs.get('git-local', 'src/{0}'.format(project)), project))
-        self.remote  = attrs.get('git-remote')
-        self.branch  = attrs.get('git-branch')
+        self.local    = self.mkdir('{0}/{1}/{2}'.format(self.workspace, attrs.get('git-local', 'src/{0}'.format(project)), project))
+        self.remote   = attrs.get('git-remote')
+        self.branch   = attrs.get('git-branch')
 
         # Repo / Git objects
-        self._repo   = None
-        self._git    = None
+        self._repo    = None
+        self._git     = None
 
         # Has the repo been updated / cloned
-        self.updated = False
-        self.cloned  = False
+        self.updated  = False
+        self.cloned   = False
 
     def _exists(self):
         """
