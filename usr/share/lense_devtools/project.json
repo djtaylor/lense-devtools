@@ -9,7 +9,7 @@
 	"attributes": {
 		"optional": ["git-local"],
 		"required": [
-			"git-src",
+			"git-remote",
 			"git-branch",
 			"version"
 		]
