@@ -1,4 +1,3 @@
-from glob import glob
 from json import loads as json_loads
 from getpass import getuser
 from os import path, listdir, unlink
@@ -95,14 +94,16 @@ class DevToolsInterface(DevToolsCommon):
             'VERSION: {0}'.format(attrs.get('version'))
         ], 'BUILD')
         
-    def _install_pkg(self, pkg):
+    def _install_pkg(self, project):
         """
         Install a debian package.
         
-        :param pkg: The package path
-        :type  pkg: str
+        :param project: The project name
+        :type  project: str
         """
-        code, err = self.shell(['sudo', 'dpkg', '-i', pkg])
+        pkg = path.expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project))
+        self.feedback.info('Installing/updating package: {0}'.format(pkg))
+        code, out, err = self.shell(['sudo', 'dpkg', '-i', pkg], stdout=True)
         
         # Failed to install package
         if not code == 0:
@@ -115,11 +116,12 @@ class DevToolsInterface(DevToolsCommon):
         Install or upgrade all or specific packages in the current builds directory.
         """
         use_projects = self.args.get('projects', None)
+        pkg_order    = ['lense-common', 'lense-client', 'lense-engine', 'lense-portal', 'lense-socket']
         
         # Installing all projects
         if not use_projects:
-            for pkg in glob(path.expanduser('~/.lense_devtools/build/current/*')):
-                self._install_pkg(pkg)
+            for project in pkg_order:
+                self._install_pkg(project)
         
         # Install specific projects
         else:
@@ -130,9 +132,10 @@ class DevToolsInterface(DevToolsCommon):
                 if not project in self.projects:
                     self.die('Cannot install project <{0}>, not in supported list: {1}'.format(project, ', '.join(self.projects.keys())))
     
-            # Build each project
-            for project in use_projects:
-                self._install_pkg(path.expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project)))
+            # Install projects in order
+            for project in pkg_order:
+                if project in use_projects:
+                    self._install_pkg(project)
         
     def _build_project(self, project, attrs):
         """
