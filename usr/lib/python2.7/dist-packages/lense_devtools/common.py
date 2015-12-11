@@ -26,7 +26,7 @@ class DevToolsCommon(object):
         :rtype: dict
         """
         config = '/etc/lense_devtools/config.json'
-        if not path.isfile(self.config):
+        if not path.isfile(config):
             raise Exception('Configuration file missing: <{0}> not found'.format(config))
         
         try:
