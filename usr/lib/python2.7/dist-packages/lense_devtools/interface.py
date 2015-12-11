@@ -128,7 +128,7 @@ class DevToolsInterface(DevToolsCommon):
              
         # Building specific projects   
         else:
-            use_projects = use_projects.split(',')
+            use_projects = use_projects[0].split(',')
             
             # Make sure project names are valid
             for project in use_projects:
