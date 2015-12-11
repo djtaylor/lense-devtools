@@ -23,7 +23,8 @@ class DevToolsArgs(object):
         return self._args.keys()
         
     def _command_help(self):
-        return ("build: Build all or specific project in the current workspace")
+        return ("build:   Build all or specific project in the current workspace\n"
+                "install: Install or upgrade all/specific projects in the current builds directory")
         
     def _desc(self):
          return ("Lense DevTools\n\n"
@@ -34,7 +35,7 @@ class DevToolsArgs(object):
         """
         Perform argument validation.
         """
-        commands = ['build']
+        commands = ['build', 'install']
         
         # Make sure the command is valid
         if not self.get('command') in commands:

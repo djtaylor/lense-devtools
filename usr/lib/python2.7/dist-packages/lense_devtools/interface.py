@@ -1,6 +1,6 @@
-from os import path, listdir, unlink
 from json import loads as json_loads
 from getpass import getuser
+from os import path, listdir, unlink, expanduser
 from lense_devtools.args import DevToolsArgs
 from lense_devtools.common import DevToolsCommon
 from lense_devtools.gitrepo import DevToolsGitRepo
@@ -115,6 +115,29 @@ class DevToolsInterface(DevToolsCommon):
         # Setup the build handler
         DevToolsDebuild(project, attrs, build=build, automode=self.args.get('auto', False)).run()
         
+    def _install(self):
+        """
+        Install or upgrade all or specific packages in the current builds directory.
+        """
+        use_projects = self.args.get('projects', None)
+        
+        # Installing all projects
+        if not use_projects:
+            code, err = self.shell(['sudo', 'dpkg', '-i', expanduser('~/.lense_devtools/build/current/*')])
+        
+        # Install specific projects
+        else:
+            use_projects = use_projects[0].split(',')
+            
+            # Make sure project names are valid
+            for project in use_projects:
+                if not project in self.projects:
+                    self.die('Cannot install project <{0}>, not in supported list: {1}'.format(project, ', '.join(self.projects.keys())))
+    
+            # Build each project
+            for project in use_projects:
+                code, err =self.shell(['sudo', 'dpkg', '-i', expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project))])
+        
     def _build(self):
         """
         Build either all projects or specified projects.
@@ -147,7 +170,8 @@ class DevToolsInterface(DevToolsCommon):
         
         # Command mapper
         mapper = {
-            'build': self._build
+            'build': self._build,
+            'install': self._install
         }
         
         # Run the command
