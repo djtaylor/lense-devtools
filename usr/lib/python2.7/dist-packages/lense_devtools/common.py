@@ -94,12 +94,12 @@ class DevToolsCommon(object):
         self.feedback.error(message)
         exit(code)
         
-    def targz(self, tarfile, source, workdir=None):
+    def targz(self, tarball, source, workdir=None):
         """
         Make a new Gzip tar file.
         
-        :param tarfile: The destination tarfile to create
-        :type  tarfile: str
+        :param tarball: The destination tarball to create
+        :type  tarball: str
         :param  source: The source folder to compress
         :type   source: str
         :param workdir: Change to a new working directory
@@ -118,9 +118,9 @@ class DevToolsCommon(object):
             chdir(workdir)
         
         # Create the tarfile
-        with tarfile.open(tarfile, 'w:gz') as tar:
+        with tarfile.open(tarball, 'w:gz') as tar:
             tar.add(source)
-        self.feedback.info('Created tarball: {0}'.format(tarfile))
+        self.feedback.info('Created tarball: {0}'.format(tarball))
             
         # Revert directory
         chdir(cwd)
