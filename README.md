@@ -20,7 +20,7 @@ Does not exist in a PPA yet, so download and build:
 [Default Installation Script](install.sh)
 
 ```sh
-$ wget https://github.com/djtaylor/lense-devtools/blob/master/install.sh
+$ wget https://raw.githubusercontent.com/djtaylor/lense-devtools/master/install.sh
 $ chmod +x install.sh
 $ sudo ./install.sh
 
