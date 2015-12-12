@@ -41,7 +41,9 @@ cd lense-devtools
 # Build the package without signing
 debuild -uc -us
 
-# Install the package
+# ~/.lense_devtools/install
 cd ..
+
+# Install the package
 dpkg -i lense-devtools_0.1.1-dev0_all.deb
 which lense-devtools
