@@ -12,6 +12,7 @@ Tools designed to assist in contributing to the various Lense projects.
     [ ] - Develop/commit functionality
     [ ] - Make Python 3 friendly
     [ ] - Further debugging
+    [ ] - Automated CI worker
 
 #### Dependencies
 
@@ -44,3 +45,25 @@ $ which lense-devtools
 ```
 
     NOTE: Suitable only for local testing
+    
+#### Usage
+
+Devtools currently support:
+
+ - Automated package building from Github
+ - Automatic local revisioning and package updates
+ - Installation/update of current packages
+
+```
+# All packages
+$ lense-devtools build
+
+# Single or subset of packages
+$ lense-devtools build --projects "lense-common,lense-client"
+
+# Install update/packages
+$ lense-devtools install
+
+# Single or subset of packages
+$ lense-devtools install --projects "lense-engine"
+```
