@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Default attributes
-WORKSPACE=~/.lense_devtools/install
+# Default workspace / installation directory
+WORKSPACE=~/.lense_devtools
+INSTALLER=$WORKSPACE/install
 
 # Must be root
 if [ "$(id -u)" != "0" ]; then
@@ -15,7 +16,7 @@ if [ -d ${WORKSPACE} ] && [ $(ls -A ${WORKSPACE}) ]; then
 	echo "INFO: Change the WORKSPACE variable or clear the directory"
 	exit 1
 fi
-mkdir -p $WORKSPACE
+mkdir -p $INSTALLER
 
 # Get build packages
 apt-get update
@@ -26,7 +27,7 @@ apt-get install python-pip
 pip install GitPython
 
 # Get the soource code
-cd $WORKSPACE
+cd $INSTALLER
 git clone https://github.com/djtaylor/lense-devtools.git
 cd lense_devtools
 
