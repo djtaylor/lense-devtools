@@ -20,7 +20,9 @@ Does not exist in a PPA yet, so download and build:
 [Default Installation Script](install.sh)
 
 ```sh
-wget https://raw.githubusercontent.com/djtaylor/lense-devtools/master/install.sh
+$ git clone https://github.com/djtaylor/lense-devtools
+$ cd lense-devtools
+$ sudo ./install.sh
 
 ```
 
