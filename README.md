@@ -1,51 +1,46 @@
 # Lense Development Tools
 
-Tools used to assist developers and contributors to the Lense project. Features currently include:
+Tools designed to assist in contributing to the various Lense projects.
 
- - Local .deb package builder
- - Automated revisioning
+ - Lense Common :: <https://github.com/djtaylor/lense-common>
+ - Lense Client :: <https://github.com/djtaylor/lense-client>
+ - Lense Engine :: <https://github.com/djtaylor/lense-engine>
+ - Lense Portal :: <https://github.com/djtaylor/lense-portal>
+ - Lense Socket :: <https://github.com/djtaylor/lense-socket>
 
-### Requirements
+#### To Do
+    [ ] - Develop/commit functionality
+    [ ] - Make Python 3 friendly
+    [ ] - Further debugging
 
-The following packages should be installed with python-pip:
+#### Dependencies
 
+Lense development tools need the following packages installed:
 ```sh
-$ sudo pip install GitPython feedback
+$ sudo apt-get update
+$ sudo apt-get install build-essential devscripts git
 ```
 
-### Builds
-
- - Lense Common <https://github.com/djtaylor/lense-common>
- - Lense Client <https://github.com/djtaylor/lense-client>
- - Lense Engine <https://github.com/djtaylor/lense-engine>
- - Lense Portal <https://github.com/djtaylor/lense-portal>
-
-### Developers
-
-Base configured to use Lense repos as a source, but can be customized for forks and branches via JSON.
-
-### Dependencies
-
+It is recommended to isntall newer versions of certain Python packages:
 ```sh
-$ sudo apt-get install git python-pip build-essential devscripts
+$ sudo apt-get install python-pip
+$ sudo pip install GitPython
 ```
 
-### Build Instructions
+#### Installation
+Does not exist in a PPA yet, so download and build:
 
 ```sh
-$ git clone https://github.com/djtaylor/lense-devbuild.git
-$ cd lense-devbuild
-$ sudo ./requirements.sh "build"
-$ python build.py
+$ cd ~
+$ mkdir lense_devtools
+$ cd lense_devtools
+$ git clone -b <master> <https://github.com/djtaylor/lense-devtools.git>
+$ tar czf lense-devtools_0.1.1.orig.tar.gz lense-devtools
+$ cd lense-devtools
+$ debuild -uc -us
+$ cd ..
+$ sudo dpkg -i lense-devtools_0.1.1-dev0_all.deb
+$ which lense-devtools
 ```
 
-### Lense All-in-One Installation
-
-The following is a quick and dirty way to get an all-in-one Lense installation.
-
-```sh
-$ sudo ./requirements.sh "lense"
-$ sudo dpkg -i build/<version>/*
-$ sudo mysql_secure_installation
-$ sudo lense-bootstrap
-```
+    NOTE: Suitable only for local testing
