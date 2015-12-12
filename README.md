@@ -1,6 +1,6 @@
 # Lense Development Tools
 
-Tools designed to assist in contributing to the various Lense projects.
+Tools designed to assist in contributing to and building/installing/updating the various Lense projects.
 
  - Lense Common :: <https://github.com/djtaylor/lense-common>
  - Lense Client :: <https://github.com/djtaylor/lense-client>
