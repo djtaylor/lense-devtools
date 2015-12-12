@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Default workspace / installation directory
+# Default workspace / installation directory / invoking user
 WORKSPACE=~/.lense_devtools
 INSTALLER=$WORKSPACE/install
+USERNAME=`logname`
 
 # Must be root
 if [ "$(id -u)" != "0" ]; then
@@ -47,3 +48,6 @@ cd ..
 # Install the package
 dpkg -i lense-devtools_0.1.1-dev0_all.deb
 which lense-devtools
+
+# Restore permissions
+chown -R ${USERNAME}:${USERNAME} $WORKSPACE
