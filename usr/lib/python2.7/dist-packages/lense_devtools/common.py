@@ -13,7 +13,7 @@ class DevToolsCommon(object):
     def __init__(self):
         self.feedback  = Feedback()
         
-        # Configuration / workspace / projects / disabled projects / auto mode
+        # Configuration / workspace / projects / disabled projects
         self.config    = self._get_config()
         self.workspace = self._get_workspace()
         self.projects  = self._get_projects()
@@ -83,6 +83,19 @@ class DevToolsCommon(object):
         if not 'WORKSPACE' in self.config:
             self.die('Missing required <WORKSPACE> key in: {0}'.format(self.config))
         return self.mkdir(path.expanduser('~/{0}'.format(self.config['WORKSPACE'])))
+        
+    def validate_projects(self, projects):
+        """
+        Validate a list of projects to make sure they are supported.
+        
+        :param projects: A list of project names
+        :type  projects: list
+        :rtype: list
+        """
+        for project in projects:
+            if not project in self.projects:
+                self.die('Project <{0}> not in supported list: {1}'.format(project, ', '.join(self.projects.keys())))
+        return projects
         
     def die(self, message='An error ocurred', code=1):
         """

@@ -1,9 +1,9 @@
 {
 	"supported": [
-		"lense-common", 
+		"lense-common",
+		"lense-client", 
 		"lense-engine", 
 		"lense-portal", 
-		"lense-client", 
 		"lense-socket"
 	],
 	"attributes": {

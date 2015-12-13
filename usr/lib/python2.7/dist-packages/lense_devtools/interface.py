@@ -1,6 +1,7 @@
 from json import loads as json_loads
 from getpass import getuser
 from os import path, listdir, unlink
+from lense_devtools.dpkg import DevToolsDpkg
 from lense_devtools.args import DevToolsArgs
 from lense_devtools.common import DevToolsCommon
 from lense_devtools.gitrepo import DevToolsGitRepo
@@ -13,8 +14,9 @@ class DevToolsInterface(DevToolsCommon):
     def __init__(self):
         super(DevToolsInterface, self).__init__()
         
-        # Load arguments
+        # Load arguments / dpkg handler
         self.args    = DevToolsArgs()
+        self.dpkg    = DevToolsDpkg()
         
         # Main command
         self.command = self.args.get('command')
@@ -55,6 +57,13 @@ class DevToolsInterface(DevToolsCommon):
             
             # Workspace must be empty if it is new
             if init_new and listdir(self.workspace):
+                
+                # Look for allowed directories
+                allowed = True
+                for d in listdir(self.workspace):
+                    if not d in ['install']:
+                        allowed = False
+                
                 self.die('Cannot initialize a non-empty workspace: {0}'.format(self.workspace))
         
             # Check if the workspace is writeable by the running user
@@ -101,15 +110,7 @@ class DevToolsInterface(DevToolsCommon):
         :param project: The project name
         :type  project: str
         """
-        pkg = path.expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project))
-        self.feedback.info('Installing/updating package: {0}'.format(pkg))
-        code, out, err = self.shell(['sudo', 'dpkg', '-i', pkg], stdout=True)
-        
-        # Failed to install package
-        if not code == 0:
-            self.feedback.block(err, 'ERROR')
-            self.die('Failed to install package: {0}'.format(pkg))
-        self.feedback.success('Installed/updated package: {0}'.format(pkg))
+        self.dpkg.installdeb(path.expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project)))
         
     def _install(self):
         """
@@ -125,12 +126,7 @@ class DevToolsInterface(DevToolsCommon):
         
         # Install specific projects
         else:
-            use_projects = use_projects[0].split(',')
-            
-            # Make sure project names are valid
-            for project in use_projects:
-                if not project in self.projects:
-                    self.die('Cannot install project <{0}>, not in supported list: {1}'.format(project, ', '.join(self.projects.keys())))
+            use_projects = self.validate_projects(use_projects[0].split(','))
     
             # Install projects in order
             for project in pkg_order:
@@ -171,12 +167,7 @@ class DevToolsInterface(DevToolsCommon):
              
         # Building specific projects   
         else:
-            use_projects = use_projects[0].split(',')
-            
-            # Make sure project names are valid
-            for project in use_projects:
-                if not project in self.projects:
-                    self.die('Cannot build project <{0}>, not in supported list: {1}'.format(project, ', '.join(self.projects.keys())))
+            use_projects = self.validate_projects(use_projects[0].split(','))
     
             # Build each project
             for project in use_projects:
