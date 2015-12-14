@@ -114,7 +114,9 @@ class DevToolsInterface(DevToolsCommon):
         :param project: The project name
         :type  project: str
         """
-        self.dpkg.installdeb(path.expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project)))
+        project_pkg = path.expanduser('~/.lense_devtools/build/current/{0}_current_all.deb'.format(project))
+        if path.isfile(project_pkg):
+            self.dpkg.installdeb(project_pkg)
         
     def _install(self):
         """
@@ -161,6 +163,7 @@ class DevToolsInterface(DevToolsCommon):
 
         # Setup the build handler
         DevToolsDebuild(project, attrs, build=build, automode=self.args.get('auto', False)).run()
+        return True
         
     def _build_status(self, status):
         """
@@ -169,11 +172,11 @@ class DevToolsInterface(DevToolsCommon):
         :param status: A dict of project/status key pairs
         :type  status: dict
         """
-        error   = 'Project "{0}" build failed'.format(p)
-        success = 'Project "{0}" build completed'.format(p)
+        error   = 'Project "{0}" build failed'
+        success = 'Project "{0}" build completed'
         for p,s in status.iteritems():
             fb = getattr(self.feedback, 'error' if not s else 'success', 'info')
-            fb(error if not s else success)
+            fb(error.format(p) if not s else success.format(p))
         
     def _build(self):
         """

@@ -169,7 +169,6 @@ class DevToolsCommon(object):
         :type    link: str
         """
         symlink(target, link)
-        self.feedback.info('Created symlink: {0} -> {1}'.format(target, link))
         
     def mkdir(self, dir_path):
         """

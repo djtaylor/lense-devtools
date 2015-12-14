@@ -26,17 +26,6 @@ class DevToolsDpkg(DebPackage):
         # Get the DebPackage object and the filename
         dpkg     = DebPackage(filename=pkg, cache=self.cache)
         pkg_name = basename(pkg)
-        
-        # Make sure the package is installable
-        #if not dpkg.check():
-            
-            # Missing dependencies
-        #    if dpkg.missing_deps:
-        #        self.feedback.warn('Missing dependencies: {0}'.format(', '.join(dpkg.missing_deps)))
-            
-            # Package check failed
-        #    self.feedback.error('Cannot install package: {0}'.format(pkg_name))
-        #    return False
             
         # Look for package conflicts
         if not dpkg.check_conflicts():
@@ -68,6 +57,3 @@ class DevToolsDpkg(DebPackage):
         # Install the package
         dpkg.install()
         self.feedback.success('{0}: {1}'.format(action, pkg_name))
-        
-        # Update the cache
-        self.cache.update()
