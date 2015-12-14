@@ -6,8 +6,10 @@ class DevToolsArgs(object):
     Class object for handling command line arguments.
     """
     def __init__(self):
-        self.parser = None
-        self._args  = None
+        
+        # Argument parser / storage
+        self.parser  = None
+        self.storage = None
         
         # Construct arguments and validate
         self._construct()
@@ -17,17 +19,22 @@ class DevToolsArgs(object):
         """
         Return a list of argument keys.
         
-        lense-devtools build {package} (optional) # Defaults to build all
-        
+        :rtype: list
         """
-        return self._args.keys()
+        return self.storage.keys()
         
     def _command_help(self):
+        """
+        :rtype: str
+        """
         return ("build:   Build all or specific project in the current workspace\n"
                 "install: Install or upgrade all/specific projects in the current builds directory")
         
     def _desc(self):
-         return ("Lense DevTools\n\n"
+        """
+        :rtype: str
+        """
+        return ("Lense DevTools\n\n"
                  "Tools to assist developers in developing and contributing\n"
                  "to Lense projects.")
         
@@ -59,16 +66,16 @@ class DevToolsArgs(object):
         
         # Parse arguments
         argv.pop(0)
-        self._args = vars(self.parser.parse_args(argv))
+        self.storage = vars(self.parser.parse_args(argv))
         
     def set(self, k, v):
         """
         Set a new argument or change the value.
         """
-        self._args[k] = v
+        self.storage[k] = v
         
     def get(self, k, default=None):
         """
         Retrieve an argument passed via the command line.
         """
-        return self._args.get(k, default)
+        return self.storage.get(k, default)

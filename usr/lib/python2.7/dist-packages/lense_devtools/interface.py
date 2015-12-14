@@ -1,6 +1,8 @@
-from json import loads as json_loads
 from getpass import getuser
-from os import path, listdir, unlink
+from json import loads as json_loads
+from os import path, listdir, unlink, geteuid
+
+# Devtools Libraries
 from lense_devtools.dpkg import DevToolsDpkg
 from lense_devtools.args import DevToolsArgs
 from lense_devtools.common import DevToolsCommon
@@ -64,7 +66,9 @@ class DevToolsInterface(DevToolsCommon):
                     if not d in ['install']:
                         allowed = False
                 
-                self.die('Cannot initialize a non-empty workspace: {0}'.format(self.workspace))
+                # Workspace contains unsupported directories (previously existing)
+                if not allowed:
+                    self.die('Cannot initialize a non-empty workspace: {0}'.format(self.workspace))
         
             # Check if the workspace is writeable by the running user
             try:
@@ -119,6 +123,10 @@ class DevToolsInterface(DevToolsCommon):
         use_projects = self.args.get('projects', None)
         pkg_order    = ['lense-common', 'lense-client', 'lense-engine', 'lense-portal', 'lense-socket']
         
+        # Must be superuser
+        if not geteuid() == 0:
+            self.die('Command <install> must be run as superuser')
+        
         # Installing all projects
         if not use_projects:
             for project in pkg_order:
@@ -154,6 +162,19 @@ class DevToolsInterface(DevToolsCommon):
         # Setup the build handler
         DevToolsDebuild(project, attrs, build=build, automode=self.args.get('auto', False)).run()
         
+    def _build_status(self, status):
+        """
+        Show the build status summary.
+        
+        :param status: A dict of project/status key pairs
+        :type  status: dict
+        """
+        error   = 'Project "{0}" build failed'.format(p)
+        success = 'Project "{0}" build completed'.format(p)
+        for p,s in status.iteritems():
+            fb = getattr(self.feedback, 'error' if not s else 'success', 'info')
+            fb(error if not s else success)
+        
     def _build(self):
         """
         Build either all projects or specified projects.
@@ -161,17 +182,18 @@ class DevToolsInterface(DevToolsCommon):
         use_projects = self.args.get('projects', None)
         
         # Building all projects
-        if not use_projects:
-            for project, attrs in self.projects.iteritems():
-                self._build_project(project, attrs)
+        if not self.args.get('projects', None):
+            status = {}
+            for p,a in self.projects.iteritems():
+                status[p] = self._build_project(p,a)
+            self._build_status(status)
+            return True
              
-        # Building specific projects   
-        else:
-            use_projects = self.validate_projects(use_projects[0].split(','))
+        # Building specific projects
+        targets = self.validate_projects(use_projects[0].split(','))
     
-            # Build each project
-            for project in use_projects:
-                self._build_project(project, self.projects[project])
+        # Build each project
+        self._build_status({p: self._build_project(p, self.projects[p]) for p in targets})
     
     def _run(self):
         """

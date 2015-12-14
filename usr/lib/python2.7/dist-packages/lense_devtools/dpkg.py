@@ -1,7 +1,7 @@
 from os.path import basename
 from feedback import Feedback
 from apt.cache import Cache
-from apt.debfile import DebPackage, VERSION_NONE, VERSION_OUTDATED, VERSION_SAME, VERSION_NEWER
+from apt.debfile import DebPackage
 
 class DevToolsDpkg(DebPackage):
     """
@@ -28,9 +28,15 @@ class DevToolsDpkg(DebPackage):
         pkg_name = basename(pkg)
         
         # Make sure the package is installable
-        if not dpkg.check():
-            self.feedback.error('Cannot install package <{0}>'.format(pkg_name))
-            return False
+        #if not dpkg.check():
+            
+            # Missing dependencies
+        #    if dpkg.missing_deps:
+        #        self.feedback.warn('Missing dependencies: {0}'.format(', '.join(dpkg.missing_deps)))
+            
+            # Package check failed
+        #    self.feedback.error('Cannot install package: {0}'.format(pkg_name))
+        #    return False
             
         # Look for package conflicts
         if not dpkg.check_conflicts():
@@ -43,22 +49,25 @@ class DevToolsDpkg(DebPackage):
         action        = 'Installed'
         
         # Not installed
-        if cache_version == VERSION_NONE:
+        if cache_version == dpkg.VERSION_NONE:
             self.feedback.info('Package <{0}> not installed'.format(pkg_name))
             
         # Upgrading
-        if cache_version == VERSION_OUTDATED:
+        if cache_version == dpkg.VERSION_OUTDATED:
             self.feedback.info('Package <{0}> outdated, upgrading'.format(pkg_name))
             action = 'Updated'
             
         # Same version
-        if cache_version == VERSION_SAME:
+        if cache_version == dpkg.VERSION_SAME:
             return self.feedback.info('Package <{0}> already installed'.format(pkg_name))
         
         # Installed is newer
-        if cache_version == VERSION_NEWER:
+        if cache_version == dpkg.VERSION_NEWER:
             return self.feedback.info('Package <{0}> has newer version installed'.format(pkg_name))
             
         # Install the package
         dpkg.install()
-        self.feedback.success('{0}: {0}'.format(action, pkg_name))
+        self.feedback.success('{0}: {1}'.format(action, pkg_name))
+        
+        # Update the cache
+        self.cache.update()
