@@ -29,7 +29,8 @@ class DevToolsArgs(object):
         :rtype: str
         """
         return ("build:   Build all/specific projects in the current workspace\n"
-                "install: Install or upgrade all/specific projects in the current builds directory")
+                "install: Install or upgrade all/specific projects in the current builds directory\n"
+                "list:    List all configured projects and attributes")
         
     def _desc(self):
         """
@@ -43,7 +44,7 @@ class DevToolsArgs(object):
         """
         Perform argument validation.
         """
-        commands = ['build', 'install']
+        commands = ['build', 'install', 'list']
         
         # Make sure the command is valid
         if not self.get('command') in commands:

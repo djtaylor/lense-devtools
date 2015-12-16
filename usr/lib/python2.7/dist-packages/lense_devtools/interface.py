@@ -1,3 +1,4 @@
+from __future__ import print_function
 from getpass import getuser
 from json import loads as json_loads
 from os import path, listdir, unlink, geteuid
@@ -198,6 +199,19 @@ class DevToolsInterface(DevToolsCommon):
         # Build each project
         self._build_status({p: self._build_project(p, self.projects[p]) for p in targets})
     
+    def _list(self):
+        """
+        List all projects and attributes found in configuration.
+        """
+        print('')
+        for p,a in self.projects.iteritems():
+            print('PROJECT: {0}'.format(p))
+            print('> Version:  {0}'.format(a['version']))
+            print('> Remote:   {0}'.format(a['git-remote']))
+            print('> Branch:   {0}'.format(a['git-branch']))
+            print('> Local:    {0}'.format(a['git-local']))
+            print('> Revision: {0}\n'.format())
+    
     def _run(self):
         """
         Private run method for starting devtools.
@@ -207,7 +221,8 @@ class DevToolsInterface(DevToolsCommon):
         # Command mapper
         mapper = {
             'build': self._build,
-            'install': self._install
+            'install': self._install,
+            'list': self._list
         }
         
         # Run the command

@@ -180,6 +180,15 @@ class DevToolsCommon(object):
             makedirs(dir_path)
         return dir_path
         
+    def get_revision(self, project):
+        """
+        Return the most recent revision for a project.
+        
+        :param project: The project name
+        :type  project: str
+        :rtype: str
+        """
+        
     def shell(self, cmd, stdout=False):
         """
         Run an arbitrary shell command.
