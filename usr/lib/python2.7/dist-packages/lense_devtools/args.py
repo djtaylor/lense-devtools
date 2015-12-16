@@ -1,3 +1,4 @@
+from __future__ import print_function
 from sys import argv, exit
 from argparse import ArgumentParser, RawTextHelpFormatter
 
@@ -27,16 +28,16 @@ class DevToolsArgs(object):
         """
         :rtype: str
         """
-        return ("build:   Build all or specific project in the current workspace\n"
+        return ("build:   Build all/specific projects in the current workspace\n"
                 "install: Install or upgrade all/specific projects in the current builds directory")
         
     def _desc(self):
         """
         :rtype: str
         """
-        return ("Lense DevTools\n\n"
-                 "Tools to assist developers in developing and contributing\n"
-                 "to Lense projects.")
+        return ("Lense Development Tools\n\n"
+                 "Tools used to streamline the testing process for Lense projects\n"
+                 "by automating local packaging/revisioning and installation.")
         
     def _validate(self):
         """
@@ -47,6 +48,7 @@ class DevToolsArgs(object):
         # Make sure the command is valid
         if not self.get('command') in commands:
             self.parser.print_help()
+            print('\nERROR: Invalid command: {0}\n'.format(self.get('command')))
             exit(1)
         
     def _construct(self):
