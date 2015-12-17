@@ -49,7 +49,7 @@ class DevToolsArgs(object):
         # Make sure the command is valid
         if not self.get('command') in commands:
             self.parser.print_help()
-            print('\nERROR: Invalid command: {0}\n'.format(self.get('command')))
+            print('\nERROR: Unsupported command: {0}\n'.format(self.get('command')))
             exit(1)
         
     def _construct(self):
