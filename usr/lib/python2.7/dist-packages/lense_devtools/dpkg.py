@@ -43,8 +43,7 @@ class DevToolsDpkg(DebPackage):
             
         # Upgrading
         if cache_version == dpkg.VERSION_OUTDATED:
-            self.feedback.info('Package <{0}> outdated, upgrading'.format(pkg_name))
-            action = 'Updated'
+            return self.feedback.info('Package <{0}> has newer version installed'.format(pkg_name))
             
         # Same version
         if cache_version == dpkg.VERSION_SAME:
@@ -52,7 +51,8 @@ class DevToolsDpkg(DebPackage):
         
         # Installed is newer
         if cache_version == dpkg.VERSION_NEWER:
-            return self.feedback.info('Package <{0}> has newer version installed'.format(pkg_name))
+            self.feedback.info('Package <{0}> outdated, upgrading'.format(pkg_name))
+            action = 'Updated'
             
         # Install the package
         dpkg.install()
