@@ -144,7 +144,7 @@ class DevToolsDebuild(DevToolsCommon):
         
         # Store the next revision
         with open(self.revisions, 'a') as f:
-            f.write('{0}:: {1}\n'.format(rev_next, self.timestmap))
+            f.write('{0}:: {1}\n'.format(rev_nxt, self.timestmap))
         
         # Return the next revision string
         return rev_nxt
