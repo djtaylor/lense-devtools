@@ -7,11 +7,17 @@ USERNAME=`logname`
 GIT_REPO='https://github.com/djtaylor/lense-devtools.git'
 LOGFILE=$INSTALLER/install.log
 
+# Shell colors
+COLOR_RED=`tput setaf 1`
+COLOR_GREEN=`tput setaf 2`
+COLOR_DEF=`tput sgr0`
+
 # Basic feedback wrapper
 show_feedback() {
 	TAG=$1
 	MSG=$2
-	echo -n '[' && echo -n $TAG | sed -e :a -e 's/^.\{1,10\}$/ & /;ta' && echo -n ']: '
+	[[ $TAG = 'ERROR' ]] && COLOR=${COLOR_RED} || COLOR=${COLOR_GREEN}
+	echo -n '[' && echo -n ${COLOR} && echo -n ${TAG} | sed -e :a -e 's/^.\{1,10\}$/ & /;ta' && echo -n ${COLOR_DEF} && echo -n ']: '
 	echo $MSG 1>&2
 }
 
