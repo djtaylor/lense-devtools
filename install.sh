@@ -4,34 +4,70 @@
 WORKSPACE=~/.lense_devtools
 INSTALLER=$WORKSPACE/install
 USERNAME=`logname`
+GIT_REPO='https://github.com/djtaylor/lense-devtools.git'
+
+# Basic feedback wrapper
+show_feedback() {
+	TAG=$1
+	MSG=$2
+	echo -n '[' && echo -n $TAG | sed -e :a -e 's/^.\{1,10\}$/ & /;ta' && echo -n ']: '
+	echo $MSG 1>&2
+}
+
+# Command wrapper
+run_command() {
+	CMD=$1
+	EXPECTS=$2
+	AS_USER=''
+	
+	# If running as a specific user
+	if [ ! -z "$AS_USER" ]; then
+		sudo su -c "eval $CMD" $AS_USER
+		
+	# Run as superuser
+	else
+		eval "$CMD &> /dev/null"	
+	fi
+	
+	# Check the return code
+	if [ "$?" != "$EXPECTS" ]; then
+		show_feedback "ERROR" "Command '$CMD' exited with code: $?, expected $EXPECTS"
+		exit $?
+	fi
+}
 
 # Must be root
 if [ "$(id -u)" != "0" ]; then
-    echo "This script must be run as root" 1>&2
+	show_feedback "ERROR" "This script must be run as root"
     exit 1
 fi
 
 # Make sure the install directory is free
 if [ -d ${WORKSPACE} ] && [ $(ls -A ${WORKSPACE}) ]; then
-    echo "ERROR: Workspace directory <${WORKSPACE}> already exists"
-    echo "INFO: Change the WORKSPACE variable or clear the directory"
+	show_feedback "ERROR" "Workspace directory <${WORKSPACE}> already exists"
+    show_feedback "INFO" "Change the WORKSPACE variable or clear the directory"
     exit 1
 fi
 mkdir -p $INSTALLER
 
+# Update the Apt cache
+run_command 'apt-get update' '0'
+show_feedback "SUCCESS" "APT -> Updated cache"
+
 # Get build packages
-apt-get update
-apt-get install build-essential devscripts git
+run_command 'apt-get install build-essential devscripts git python-pip' '0'
+show_feedback "SUCCESS" "APT -> Installed packages: build-essential, devscripts, git, python-pip"
 	
 # Github Python bindings
-apt-get install python-pip
-pip install GitPython
+run_command 'pip install GitPython' '0'
+show_feedback "SUCCESS" "PIP -> Installed modules: GitPython"
 
 # ~/.lense_devtools/install
 cd $INSTALLER
 
 # Get the latest source code
-git clone https://github.com/djtaylor/lense-devtools.git
+run_command "git clone ${GIT_REPO}" "0"
+show_feedback "SUCCESS" "GIT -> Cloned Git repository ${GIT_REPO}"
 
 # Tar the source directory
 tar czf lense-devtools_0.1.1.orig.tar.gz lense-devtools
@@ -40,14 +76,15 @@ tar czf lense-devtools_0.1.1.orig.tar.gz lense-devtools
 cd lense-devtools
 
 # Build the package without signing
-debuild -uc -us
+run_command 'debuild -uc -us' '0' "$USERNAME"
+show_feedback "SUCECSS" "DEBUILD -> Built package lense-devtools"
 
 # ~/.lense_devtools/install
 cd ..
 
 # Install the package
-dpkg -i lense-devtools_0.1.1-dev0_all.deb
-which lense-devtools
+run_command 'dpkg -i lense-devtools_0.1.1-dev0_all.deb' '0'
+show_feedback "SUCCESS" "DPKG -> Installed package -> $(which lense-devtools)"
 
 # Restore permissions
 chown -R ${USERNAME}:${USERNAME} $WORKSPACE
