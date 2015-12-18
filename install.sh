@@ -82,7 +82,7 @@ cd lense-devtools
 
 # Build the package without signing
 run_command 'debuild -uc -us' '0' "$USERNAME"
-show_feedback "SUCECSS" "DEBUILD -> Built package lense-devtools"
+show_feedback "SUCCESS" "DEBUILD -> Built package lense-devtools"
 
 # ~/.lense_devtools/install
 cd ..
