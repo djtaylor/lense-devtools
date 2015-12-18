@@ -5,6 +5,7 @@ WORKSPACE=~/.lense_devtools
 INSTALLER=$WORKSPACE/install
 USERNAME=`logname`
 GIT_REPO='https://github.com/djtaylor/lense-devtools.git'
+LOGFILE=$INSTALLER/install.log
 
 # Basic feedback wrapper
 show_feedback() {
@@ -22,16 +23,17 @@ run_command() {
 	
 	# If running as a specific user
 	if [ ! -z "$AS_USER" ]; then
-		sudo su -c "eval $CMD" $AS_USER
+		sudo su -c "eval $CMD &>> $LOGFILE" $AS_USER
 		
 	# Run as superuser
 	else
-		eval "$CMD &> /dev/null"	
+		eval "$CMD &>> $LOGFILE"	
 	fi
 	
 	# Check the return code
 	if [ "$?" != "$EXPECTS" ]; then
 		show_feedback "ERROR" "Command '$CMD' exited with code: $?, expected $EXPECTS"
+		show_feedback "ERROR" "See logfile for details -> ${LOGFILE}"
 		exit $?
 	fi
 }
@@ -49,6 +51,9 @@ if [ -d ${WORKSPACE} ] && [ $(ls -A ${WORKSPACE}) ]; then
     exit 1
 fi
 mkdir -p $INSTALLER
+
+# Create the logfile
+touch $LOGFILE
 
 # Update the Apt cache
 run_command 'apt-get update' '0'
