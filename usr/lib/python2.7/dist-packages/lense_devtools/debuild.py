@@ -129,7 +129,7 @@ class DevToolsDebuild(DevToolsCommon):
                 f.write('dev0:: {0}\n'.format(self.timestamp()))
             return 'dev0'
         
-        # Open the revisions file
+        # Read the latest revision
         with open(self.revisions, 'r') as f:
             revision = f.readline().rstrip()
                 
@@ -142,9 +142,15 @@ class DevToolsDebuild(DevToolsCommon):
         rev_nxt = '{0}{1}'.format(rev_id, int(rev_num) + 1)
         self.feedback.info('Building next revision -> {0}'.format(rev_nxt))
         
+        # Read the entire revisions file
+        all_revisions = None
+        with open(self.revisions, 'r') as f:
+            all_revisions = f.read()
+        
         # Store the next revision
-        with open(self.revisions, 'a') as f:
+        with open(self.revisions, 'w') as f:
             f.write('{0}:: {1}\n'.format(rev_nxt, self.timestamp()))
+            f.write(all_revisions)
         
         # Return the next revision string
         return rev_nxt
