@@ -126,7 +126,7 @@ class DevToolsDebuild(DevToolsCommon):
         if not path.isfile(self.revisions):
             self.feedback.info('Building base revision -> dev0')
             with open(self.revisions, 'w') as f:
-                f.write('dev0:: {0}'.format(self.timestamp()))
+                f.write('dev0:: {0}\n'.format(self.timestamp()))
             return 'dev0'
         
         # Open the revisions file
@@ -141,6 +141,12 @@ class DevToolsDebuild(DevToolsCommon):
         # Next revision
         rev_nxt = '{0}{1}'.format(rev_id, int(rev_num) + 1)
         self.feedback.info('Building next revision -> {0}'.format(rev_nxt))
+        
+        # Store the next revision
+        with open(self.revisions, 'a') as f:
+            f.write('{0}:: {1}\n'.format(rev_next, self.timestmap))
+        
+        # Return the next revision string
         return rev_nxt
 
     def _tar_source(self):
