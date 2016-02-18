@@ -67,7 +67,7 @@ show_feedback "SUCCESS" "APT -> Updated cache"
 
 # Get build packages
 run_command 'apt-get install build-essential debhelper devscripts git python-dev python-pip -y' '0'
-show_feedback "SUCCESS" "APT -> Installed packages: build-essential, devscripts, git, python-pip"
+show_feedback "SUCCESS" "APT -> Installed packages: build-essential, debhelper, devscripts, git, python-dev, python-pip"
 	
 # Github Python bindings
 run_command 'pip install GitPython' '0'
