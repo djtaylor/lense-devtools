@@ -8,7 +8,7 @@ GIT_REPO='https://github.com/djtaylor/lense-devtools.git'
 LOGFILE=$INSTALLER/install.log
 
 # APT / PIP packages
-APT_PACKAGES="build-essential debhelper devscripts git python-dev python-pip libyaml-dev"
+APT_PACKAGES="build-essential debhelper devscripts git python-dev python-pip"
 PIP_PACKAGES="GitPython feedback Django==1.8.9"
 
 # Shell colors
