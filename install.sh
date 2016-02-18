@@ -7,6 +7,10 @@ USERNAME=`logname`
 GIT_REPO='https://github.com/djtaylor/lense-devtools.git'
 LOGFILE=$INSTALLER/install.log
 
+# APT / PIP packages
+APT_PACKAGES="build-essential debhelper devscripts git python-dev python-pip libyaml-dev"
+PIP_PACKAGES="GitPython feedback Crypto"
+
 # Shell colors
 COLOR_RED=`tput setaf 1`
 COLOR_GREEN=`tput setaf 2`
@@ -66,12 +70,12 @@ run_command 'apt-get update' '0'
 show_feedback "SUCCESS" "APT -> Updated cache"
 
 # Get build packages
-run_command 'apt-get install build-essential debhelper devscripts git python-dev python-pip -y' '0'
-show_feedback "SUCCESS" "APT -> Installed packages: build-essential, debhelper, devscripts, git, python-dev, python-pip"
+run_command "apt-get install ${APT_PACKAGES} -y" '0'
+show_feedback "SUCCESS" "APT -> Installed packages: ${APT_PACKAGES}"
 	
 # Github Python bindings
-run_command 'pip install GitPython' '0'
-show_feedback "SUCCESS" "PIP -> Installed modules: GitPython"
+run_command "pip install ${PIP_PACKAGES}" '0'
+show_feedback "SUCCESS" "PIP -> Installed modules: ${PIP_PACKAGES}"
 
 # ~/.lense_devtools/install
 cd $INSTALLER
