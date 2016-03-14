@@ -9,7 +9,7 @@ LOGFILE=$INSTALLER/install.log
 
 # APT / PIP packages
 APT_PACKAGES="build-essential debhelper devscripts git python-dev python-pip"
-PIP_PACKAGES="GitPython feedback Django==1.8.9 python-keyczar"
+PIP_PACKAGES="GitPython feedback Django==1.8.9 python-keyczar socketIO_client"
 
 # Shell colors
 COLOR_RED=`tput setaf 1`
