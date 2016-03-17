@@ -103,3 +103,10 @@ show_feedback "SUCCESS" "DPKG -> Installed package -> $(which lense-devtools)"
 
 # Restore permissions
 chown -R ${USERNAME}:${USERNAME} $WORKSPACE
+
+# Install MySQL server
+run_command "apt-get install mysql-server -y" '0'
+
+# Install NPM/NodeJS
+run_command "apt-get install npm -y" '0'
+ln -s /usr/bin/nodejs /usr/bin/node
