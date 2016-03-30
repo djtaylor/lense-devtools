@@ -8,7 +8,7 @@ GIT_REPO='https://github.com/djtaylor/lense-devtools.git'
 LOGFILE=$INSTALLER/install.log
 
 # APT / PIP packages
-APT_PACKAGES="build-essential debhelper devscripts git python-dev python-pip"
+APT_PACKAGES="build-essential debhelper devscripts git python-dev python-pip python-crypto python-ldap python-mysqldb apache2 libapache2-mod-wsgi"
 PIP_PACKAGES="GitPython feedback Django==1.8.9 python-keyczar socketIO_client"
 
 # Shell colors
@@ -65,6 +65,9 @@ mkdir -p $INSTALLER
 # Create the logfile
 touch $LOGFILE
 
+# Clear lists to prevent hash sum mismatch errors
+rm -rf /var/lib/apt/lists/*
+
 # Update the Apt cache
 run_command 'apt-get update' '0'
 show_feedback "SUCCESS" "APT -> Updated cache"
@@ -105,7 +108,8 @@ show_feedback "SUCCESS" "DPKG -> Installed package -> $(which lense-devtools)"
 chown -R ${USERNAME}:${USERNAME} $WORKSPACE
 
 # Install MySQL server
-run_command "apt-get install mysql-server -y" '0'
+apt-get install mysql-server -y
+mysql_secure_installation
 
 # Install NPM/NodeJS
 run_command "apt-get install npm -y" '0'
