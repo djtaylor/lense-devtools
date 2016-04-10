@@ -9,7 +9,7 @@ LOGFILE=$INSTALLER/install.log
 
 # APT / PIP packages
 APT_PACKAGES="build-essential debhelper devscripts git python-dev python-pip python-crypto python-ldap python-mysqldb apache2 libapache2-mod-wsgi"
-PIP_PACKAGES="GitPython feedback Django==1.8.9 python-keyczar socketIO_client django-encrypted-fields"
+PIP_PACKAGES="GitPython feedback Django==1.8.9 python-keyczar socketIO_client django-encrypted-fields django_auth_ldap"
 
 # Shell colors
 COLOR_RED=`tput setaf 1`
